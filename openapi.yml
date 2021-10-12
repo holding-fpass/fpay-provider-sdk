@@ -72,7 +72,7 @@ servers:
   - url: http://localhost:3333
     description: Local Development
 paths:
-  # User
+  # Buyers
   "/marketplaces/{id}/buyers":
     get:
       operationId: getBuyers
