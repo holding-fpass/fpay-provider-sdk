@@ -778,3 +778,258 @@ paths:
                 holder_name: "John Doe"
                 created_at: "2024-09-27T01:12:20+00:00"
                 updated_at: "2024-09-27T01:12:20+00:00"
+  # Plans
+  "/marketplaces/{marketplace_id}/plans":
+    get:
+      operationId: getPlans
+      tags:
+        - Plans
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      responses:
+        200:
+          description: Busca por todos os planos realizada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/PlanDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "2077b7b6-63b6-4910-b5bd-831fa60a97cc",
+                    "resource": "plan",
+                    "marketplace": "158b1371-d14a-4983-9f56-9ddc2d877906",
+                    "name": "Assinatura mensal",
+                    "frequency": "monthly",
+                    "interval": 1,
+                    "payment_methods": "credit",
+                    "amount": 3000,
+                    "setup_amount": 0,
+                    "currency": "BRL",
+                    "description": null,
+                    "duration": 12,
+                    "created_at": "2024-08-11T16:05:01+00:00",
+                    "updated_at": "2024-08-11T16:05:01+00:00"
+                  },
+                  {
+                    "id": "cb802996-01cf-4fc9-aded-c112023c585e",
+                    "resource": "plan",
+                    "marketplace": "158b1371-d14a-4983-9f56-9ddc2d877906",
+                    "name": "Assinatura anual",
+                    "frequency": "monthly",
+                    "interval": 1,
+                    "payment_methods": "credit",
+                    "amount": 30000,
+                    "setup_amount": 0,
+                    "currency": "BRL",
+                    "description": null,
+                    "duration": 1,
+                    "created_at": "2024-08-11T16:04:52+00:00",
+                    "updated_at": "2024-08-11T16:04:52+00:00"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createPlan
+      tags:
+        - Plans
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador marketplace
+      requestBody:
+        description: Informações para criar um plano
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlanDefinition"
+            example:
+              name: "Assinatura anual"
+              frequency: "monthly"
+              interval: 1
+              payment_methods: ["credit"]
+              amount: 30000
+              setup_amount: 0
+              description: null
+              duration: 1
+      responses:
+        200:
+          description: Registro de um plano realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanDefinition"
+              example:
+                id: "cb802996-01cf-4fc9-aded-c112023c585e"
+                resource: "plan"
+                marketplace: "158b1371-d14a-4983-9f56-9ddc2d877906"
+                name: "Assinatura anual"
+                frequency: "monthly"
+                interval: 1
+                payment_methods: "credit"
+                amount: 30000
+                setup_amount: 0
+                currency: "BRL"
+                description: null
+                duration: 1
+                created_at: "2024-08-11T16:04:52+00:00"
+                updated_at: "2024-08-11T16:04:52+00:00"
+  # Plans
+  "/marketplaces/{marketplace_id}/plans/{plan_id}":
+    get:
+      operationId: getPlan
+      tags:
+        - Plans
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: plan_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do plano
+      responses:
+        200:
+          description: Busca de um plano realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanDefinition"
+              example:
+                id: "cb802996-01cf-4fc9-aded-c112023c585e"
+                resource: "plan"
+                marketplace: "158b1371-d14a-4983-9f56-9ddc2d877906"
+                name: "Assinatura anual"
+                frequency: "monthly"
+                interval: 1
+                payment_methods: "credit"
+                amount: 30000
+                setup_amount: 0
+                currency: "BRL"
+                description: null
+                duration: 1
+                created_at: "2024-08-11T16:04:52+00:00"
+                updated_at: "2024-08-11T16:04:52+00:00"
+    put:
+      operationId: updatePlan
+      tags:
+        - Plans
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: plan_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do plano
+      requestBody:
+        description: Informações para atualizar um plano
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlanDefinition"
+            example:
+              name: "Assinatura anual"
+              frequency: "monthly"
+              interval: 1
+              payment_methods: ["credit"]
+              amount: 30000
+              setup_amount: 0
+              description: null
+              duration: 1
+      responses:
+        200:
+          description: Comprador atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuyerDefinition"
+              example:
+                name: "John Doe"
+                document_number: "12345678900"
+                email: "email@example.com"
+                email_secondary: "email2@example.com"
+                phone_number: "00123456789"
+                birthdate: "1999-01-01"
+                obs: "A description here"
+                street: "Rua Teodoro"
+                house_number: "123"
+                postal_code: "123456123"
+                neighborhood: "Jardim Teodoro"
+                city: "São Paulo"
+                state_initials: "SP"
+                state: "São Paulo"
+                country_code: "BR"
+    delete:
+      operationId: deletePlan
+      tags:
+        - Plans
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: plan_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do plano
+      responses:
+        200:
+          description: Plano deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Plan has been deleted
