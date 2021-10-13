@@ -267,7 +267,7 @@ components:
         updated_at:
           $ref: "#/components/schemas/DateISOReadOnly"
     # Subscription Definition
-    SubscriptionDefintion:
+    SubscriptionDefinition:
       type: object
       properties:
         id:
@@ -980,27 +980,26 @@ paths:
               duration: 1
       responses:
         200:
-          description: Comprador atualizado com sucesso
+          description: Plano atualizado com sucesso
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/BuyerDefinition"
               example:
-                name: "John Doe"
-                document_number: "12345678900"
-                email: "email@example.com"
-                email_secondary: "email2@example.com"
-                phone_number: "00123456789"
-                birthdate: "1999-01-01"
-                obs: "A description here"
-                street: "Rua Teodoro"
-                house_number: "123"
-                postal_code: "123456123"
-                neighborhood: "Jardim Teodoro"
-                city: "São Paulo"
-                state_initials: "SP"
-                state: "São Paulo"
-                country_code: "BR"
+                id: "cb802996-01cf-4fc9-aded-c112023c585e"
+                resource: "plan"
+                marketplace: "158b1371-d14a-4983-9f56-9ddc2d877906"
+                name: "Assinatura anual"
+                frequency: "monthly"
+                interval: 1
+                payment_methods: "credit"
+                amount: 30000
+                setup_amount: 0
+                currency: "BRL"
+                description: null
+                duration: 1
+                created_at: "2024-08-11T16:04:52+00:00"
+                updated_at: "2024-08-11T16:04:52+00:00"
     delete:
       operationId: deletePlan
       tags:
@@ -1033,3 +1032,346 @@ paths:
                     type: string
               example:
                 message: Plan has been deleted
+  # Subscriptions
+  "/marketplaces/{marketplace_id}/subscriptions":
+    get:
+      operationId: getSubscriptions
+      tags:
+        - Subscriptions
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      responses:
+        200:
+          description: Busca por todos as assinaturas realizada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/SubscriptionDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8",
+                    "resource": "subscription",
+                    "plan": "df8eb1ac-c63f-4060-85d7-8352d0dfa692",
+                    "customer": "827ed4e0-ebe0-449f-82d7-038564492993",
+                    "description": null,
+                    "payment_method": "credit",
+                    "due_date": "2024-09-11T00:00:00+00:00",
+                    "due_since_date": null,
+                    "expiration_date": null,
+                    "amount": null,
+                    "currency": "BRL",
+                    "status": "active",
+                    "suspended_at": null,
+                    "created_at": "2024-08-11T15:53:12+00:00",
+                    "updated_at": "2024-08-11T15:53:22+00:00"
+                  },
+                  {
+                    "id": "2952d7cc-4072-4324-a5e6-c99c6f9e796c",
+                    "resource": "subscription",
+                    "plan": "4ea1158b-5431-41d4-9421-e5ff49be1818",
+                    "customer": "c41f668c-427b-4c8e-a483-22dd215a9874",
+                    "description": null,
+                    "payment_method": "credit",
+                    "due_date": "2024-09-11T00:00:00+00:00",
+                    "due_since_date": null,
+                    "expiration_date": null,
+                    "amount": null,
+                    "currency": "BRL",
+                    "status": "canceled",
+                    "suspended_at": null,
+                    "created_at": "2024-08-11T15:50:54+00:00",
+                    "updated_at": "2024-08-11T15:53:21+00:00"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createSubscription
+      tags:
+        - Subscriptions
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador marketplace
+      requestBody:
+        description: Informações para criar uma assinatura
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionDefinition"
+            example:
+              plan: "4df56ebb-79cd-40cb-9e10-a57d093f592b"
+              customer: "827ed4e0-ebe0-449f-82d7-03856449299"
+              description: Assinatura mensal
+              payment_method: "credit"
+              due_date: 2021-08-27
+              currency: BRL
+      responses:
+        200:
+          description: Registro de uma assinatura realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionDefinition"
+              example:
+                id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                resource: "subscription"
+                plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                description: null
+                payment_method: "credit"
+                due_date: "2024-09-11T00:00:00+00:00"
+                due_since_date: null
+                expiration_date: null
+                amount: null
+                currency: "BRL"
+                status: "active"
+                suspended_at: null
+                created_at: "2024-08-11T15:53:12+00:00"
+                updated_at: "2024-08-11T15:53:22+00:00"
+  # Plans
+  "/marketplaces/{marketplace_id}/subscriptions/{subscription_id}":
+    get:
+      operationId: getSubscription
+      tags:
+        - Subscriptions
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: subscription_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da assinatura
+      responses:
+        200:
+          description: Busca de uma assinatura realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionDefinition"
+              example:
+                id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                resource: "subscription"
+                plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                description: null
+                payment_method: "credit"
+                due_date: "2024-09-11T00:00:00+00:00"
+                due_since_date: null
+                expiration_date: null
+                amount: null
+                currency: "BRL"
+                status: "active"
+                suspended_at: null
+                created_at: "2024-08-11T15:53:12+00:00"
+                updated_at: "2024-08-11T15:53:22+00:00"
+    put:
+      operationId: updateSubscription
+      tags:
+        - Subscriptions
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: subscription_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da assinatura
+      requestBody:
+        description: Informações para atualizar uma assinatura
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionDefinition"
+            example:
+              description: null
+              payment_method: "credit"
+              due_date: "2024-09-11T00:00:00+00:00"
+              expiration_date: "2020-12-03"
+              amount: 4999
+              currency: "BRL"
+      responses:
+        200:
+          description: Assinatura atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionDefinition"
+              example:
+                id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                resource: "subscription"
+                plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                description: null
+                payment_method: "credit"
+                due_date: "2024-09-11T00:00:00+00:00"
+                due_since_date: null
+                expiration_date: null
+                amount: null
+                currency: "BRL"
+                status: "active"
+                suspended_at: null
+                created_at: "2024-08-11T15:53:12+00:00"
+                updated_at: "2024-08-11T15:53:22+00:00"
+    delete:
+      operationId: cancelSubscription
+      tags:
+        - Subscriptions
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: subscription_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da assinatura
+      responses:
+        200:
+          description: Assinatura cancelada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Subscription has been canceled
+  "/marketplaces/{marketplace_id}/subscriptions/{subscription_id}/suspend":
+    post:
+      operationId: suspendSubscription
+      tags:
+        - Subscriptions
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: subscription_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da assinatura
+      responses:
+        200:
+          description: Assinatura suspensa com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionDefinition"
+              example:
+                id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                resource: "subscription"
+                plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                description: null
+                payment_method: "credit"
+                due_date: "2024-09-11T00:00:00+00:00"
+                due_since_date: null
+                expiration_date: null
+                amount: null
+                currency: "BRL"
+                status: "suspended"
+                suspended_at: "2024-09-07T15:53:12+00:00"
+                created_at: "2024-08-11T15:53:12+00:00"
+                updated_at: "2024-08-11T15:53:22+00:00"
+  "/marketplaces/{marketplace_id}/subscriptions/{subscription_id}/reactive":
+    post:
+      operationId: reactiveSubscription
+      tags:
+        - Subscriptions
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: subscription_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da assinatura
+      responses:
+        200:
+          description: Assinatura ativada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionDefinition"
+              example:
+                id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                resource: "subscription"
+                plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                description: null
+                payment_method: "credit"
+                due_date: "2024-09-11T00:00:00+00:00"
+                due_since_date: null
+                expiration_date: null
+                amount: null
+                currency: "BRL"
+                status: "active"
+                suspended_at: null
+                created_at: "2024-08-11T15:53:12+00:00"
+                updated_at: "2024-08-11T15:53:22+00:00"
