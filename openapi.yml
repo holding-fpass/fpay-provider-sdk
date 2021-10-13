@@ -8,9 +8,9 @@ components:
       type: http
       scheme: basic
   schemas:
-    # Common
-    Uuid:
-      description: "Id unico"
+    # Common Definitions
+    UUID:
+      description: "Identificador único"
       type: string
       format: uuid
       pattern: ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
@@ -22,78 +22,469 @@ components:
     DateISO:
       description: Data em formato ISO 1806
       type: string
-      pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)
-    # Responses
-    BuyersResponse:
+      pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d+([+-][0-2]\d:[0-5]\d|Z)
+    DateISOReadOnly:
+      description: Data em formato ISO 1806
+      type: string
+      pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d+([+-][0-2]\d:[0-5]\d|Z)
+    DateISOReadOnlyNullable:
+      description: Data em formato ISO 1806
+      type: string
+      pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d+([+-][0-2]\d:[0-5]\d|Z)
+      nullable: true
+    ListDefinition:
       type: object
-      required:
-        - name
-        - document_number
+      properties:
+        resource:
+          type: string
+          enum:
+            - list
+        items:
+          type: array
+          items:
+            type: object
+        limit:
+          type: number
+        offset:
+          type: number
+        page:
+          type: number
+        total:
+          type: number
+        total_pages:
+          type: number
+        has_more:
+          type: boolean
+    # Buyer Definition
+    BuyerDefinition:
+      type: object
       properties:
         id:
           type: string
-        resource:
-          type: string
+          readOnly: true
         name:
           type: string
         document_number:
           type: string
         email:
           type: string
+          nullable: true
         email_secondary:
           type: string
+          nullable: true
         phone_number:
           type: string
+          nullable: true
         birthdate:
           type: string
+          nullable: true
         obs:
           type: string
+          nullable: true
         street:
           type: string
+          nullable: true
         house_number:
           type: string
+          nullable: true
         postal_code:
           type: string
+          nullable: true
         neighborhood:
           type: string
+          nullable: true
         city:
           type: string
+          nullable: true
         state_initials:
           type: string
+          nullable: true
         state:
           type: string
+          nullable: true
         country_code:
           type: string
+          nullable: true
         created_at:
-          $ref: "#/components/schemas/DateISO"
+          $ref: "#/components/schemas/DateISOReadOnly"
         updated_at:
-          $ref: "#/components/schemas/DateISO"
+          $ref: "#/components/schemas/DateISOReadOnly"
+    # Card Definition
+    CardDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        resource:
+          enum:
+            - card
+        customer:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+        first4digits:
+          type: string
+        last4digits:
+          type: string
+        card_brand:
+          type: string
+        expiration_month:
+          type: string
+        expiration_year:
+          type: string
+        holder_name:
+          type: string
+        created_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+        updated_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+    # Webhook Definition
+    WebhookDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        resource:
+          enum:
+            - event
+        endpoint:
+          type: string
+        description:
+          type: string
+          nullable: true
+        event:
+          enum:
+            - all
+            - bank_account.associated
+            - bank_account.deleted
+            - buyer.transaction.canceled
+            - buyer.transaction.charge_back
+            - buyer.transaction.disputed
+            - buyer.transaction.failed
+            - buyer.transaction.pre_authorized
+            - buyer.transaction.reversed
+            - buyer.transaction.succeeded
+            - buyer.transaction.updated
+            - buyer.card.associated
+            - document.created
+            - document.updated
+            - invoice.created
+            - invoice.canceled
+            - invoice.overdue
+            - invoice.paid
+            - invoice.refunded
+            - plan.created
+            - plan.deleted
+            - plan.updated
+            - receivable.canceled
+            - receivable.created
+            - receivable.deleted
+            - receivable.paid
+            - receivable.refunded
+            - receivable.scheduled
+            - seller.actived
+            - seller.created
+            - seller.deleted
+            - seller.denied
+            - seller.enabled
+            - seller.updated
+            - subscription.active
+            - subscription.created
+            - subscription.deleted
+            - subscription.expired
+            - subscription.suspended
+            - subscription.updated
+            - subscription.paid
+            - transaction.canceled
+            - transaction.capture.failed
+            - transaction.capture.succeeded
+            - transaction.charge_back
+            - transaction.commission.succeeded
+            - transaction.created
+            - transaction.dispute.succeeded
+            - transaction.disputed
+            - transaction.failed
+            - transaction.pre_authorization.succeeded
+            - transaction.pre_authorized
+            - transaction.reversed
+            - transaction.succeeded
+            - transaction.updated
+            - transaction.void.failed
+            - transaction.void.succeeded
+            - transfer.canceled
+            - transfer.confirmed
+            - transfer.created
+            - transfer.failed
+            - transfer.succeeded
+        created_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+        updated_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+    # Plan Definition
+    PlanDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        resource:
+          enum:
+            - plan
+          readOnly: true
+        marketplace:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        frequency:
+          enum:
+            - daily
+            - monthly
+            - weekly
+            - annually
+        interval:
+          type: number
+        payment_methods:
+          type: string
+        amount:
+          type: number
+        setup_amount:
+          type: number
+        currency:
+          enum:
+            - BRL
+        description:
+          type: string
+          nullable: true
+        duration:
+          type: number
+        created_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+        updated_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+    # Subscription Definition
+    SubscriptionDefintion:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        resource:
+          enum:
+            - subscription
+          readOnly: true
+        plan:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+        payment_method:
+          type: string
+          readOnly: true
+        due_date:
+          type: string
+        due_since_date:
+          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+        expiration_date:
+          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+        amount:
+          type: number
+          nullable: true
+        currency:
+          enum:
+            - BRL
+        status:
+          enum:
+           - active
+           - canceled
+           - expired
+           - suspended
+        suspended_at:
+          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+        created_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+        updated_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
 servers:
-  - url: http://localhost:3333
-    description: Local Development
+  - url: https://test.api.recebafacil.com
+    description: Test
 paths:
   # Buyers
-  "/marketplaces/{id}/buyers":
+  "/marketplaces/{marketaplace_id}/buyers":
     get:
       operationId: getBuyers
       tags:
         - Buyers
       security:
-       - BasicAuth: []
+        - BasicAuth: []
       parameters:
         - in: path
-          name: id
+          name: marketaplace_id
           schema:
-            $ref: "#/components/schemas/Uuid"
+            $ref: "#/components/schemas/UUID"
           required: true
-          description: Tipo de certificado a ser obtido
+          description: Identificador do marketplace
       responses:
-        "200":
-          description: "Sucesso"
+        200:
+          description: Busca por todos os compradores realizada com sucesso
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BuyersResponse"
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BuyerDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "c1b319b3-b291-4a3a-941a-7ea138a052ae",
+                    "resource": "buyer",
+                    "name": "Edinei Rodrigues Filho",
+                    "document_number": "45830625830",
+                    "email": "edineibk@gmail.com",
+                    "email_secondary": null,
+                    "phone_number": null,
+                    "birthdate": null,
+                    "obs": null,
+                    "street": null,
+                    "house_number": null,
+                    "postal_code": null,
+                    "neighborhood": null,
+                    "city": null,
+                    "state_initials": null,
+                    "state": null,
+                    "country_code": null,
+                    "created_at": "2021-10-07T13:41:45+00:00",
+                    "updated_at": "2021-10-07T13:41:45+00:00"
+                  },
+                  {
+                    "id": "cb704242-fa70-4ed3-99c6-9a3cb64473fd",
+                    "resource": "buyer",
+                    "name": "ana",
+                    "document_number": "40588242047",
+                    "email": "ana@aluno.com",
+                    "email_secondary": "ana2@aluno.com",
+                    "phone_number": "17992136757",
+                    "birthdate": "1999-03-15T00:00:00+00:00",
+                    "obs": "Cliente loja física",
+                    "street": "Rua Teodoro",
+                    "house_number": "123",
+                    "postal_code": "123456123",
+                    "neighborhood": "Jardim Teodoro",
+                    "city": "São Paulo",
+                    "state_initials": "SP",
+                    "state": "São paulo",
+                    "country_code": "BR",
+                    "created_at": "2021-09-29T14:42:36+00:00",
+                    "updated_at": "2021-09-29T14:42:36+00:00"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createBuyer
+      tags:
+        - Buyers
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      requestBody:
+        description: Informações para criar um comprador
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuyerDefinition"
+            example:
+              name: "John Doe"
+              document_number: "12345678900"
+              email: "email@example.com"
+              email_secondary: "email2@example.com"
+              phone_number: "00123456789"
+              birthdate: "1999-01-01"
+              obs: "A description here"
+              street: "Rua Teodoro"
+              house_number: "123"
+              postal_code: "123456123"
+              neighborhood: "Jardim Teodoro"
+              city: "São Paulo"
+              state_initials: "SP"
+              state: "São Paulo"
+              country_code: "BR"
+      responses:
+        200:
+          description: Registro de um comprador realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuyerDefinition"
+              example:
+                name: "John Doe"
+                document_number: "12345678900"
+                email: "email@example.com"
+                email_secondary: "email2@example.com"
+                phone_number: "00123456789"
+                birthdate: "1999-01-01"
+                obs: "A description here"
+                street: "Rua Teodoro"
+                house_number: "123"
+                postal_code: "123456123"
+                neighborhood: "Jardim Teodoro"
+                city: "São Paulo"
+                state_initials: "SP"
+                state: "São Paulo"
+                country_code: "BR"
+  # Buyers
+  "/marketplaces/{marketaplace_id}/buyers/{buyer_id}":
+    get:
+      operationId: getBuyer
+      tags:
+        - Buyers
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: buyer_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do comprador
+      responses:
+        200:
+          description: Busca de um comprador realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuyerDefinition"
               example:
                 id: "c1b319b3-b291-4a3a-941a-7ea138a052ae"
                 resource: "buyer"
@@ -114,3 +505,222 @@ paths:
                 country_code: null
                 created_at: "2021-10-07T13:41:45+00:00"
                 updated_at: "2021-10-07T13:41:45+00:00"
+    put:
+      operationId: updateBuyer
+      tags:
+        - Buyers
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: buyer_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do comprador
+      requestBody:
+        description: Informações para atualizar um comprador
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuyerDefinition"
+            example:
+              name: "John Doe"
+              email: "email@example.com"
+              email_secondary: "email2@example.com"
+              phone_number: "00123456789"
+              birthdate: "1999-01-01"
+              obs: "A description here"
+              street: "Rua Teodoro"
+              house_number: "123"
+              postal_code: "12345123"
+              neighborhood: "Jardim Teodoro"
+              city: "São Paulo"
+              state_initials: "SP"
+              state: "São Paulo"
+              country_code: "BR"
+      responses:
+        200:
+          description: Comprador atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuyerDefinition"
+              example:
+                name: "John Doe"
+                document_number: "12345678900"
+                email: "email@example.com"
+                email_secondary: "email2@example.com"
+                phone_number: "00123456789"
+                birthdate: "1999-01-01"
+                obs: "A description here"
+                street: "Rua Teodoro"
+                house_number: "123"
+                postal_code: "123456123"
+                neighborhood: "Jardim Teodoro"
+                city: "São Paulo"
+                state_initials: "SP"
+                state: "São Paulo"
+                country_code: "BR"
+    delete:
+      operationId: deleteBuyer
+      tags:
+        - Buyers
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketaplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: buyer_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do comprador
+      responses:
+        200:
+          description: Comprador deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Buyer has been deleted
+  # Buyers
+  "/marketplace/{marketplace_id}/buyers/{buyer_id}/cards":
+    get:
+      operationId: getCards
+      tags:
+        - Buyers/Card
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: buyer_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do comprador
+      responses:
+        200:
+          description: Busca por todos os cartões de créditos de um comprador realilzada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/CardDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "0a5a0957-dc20-4835-bdb4-237c5426f160",
+                    "resource": "card",
+                    "customer": "3750690f-54a0-4d6a-aff8-4070e61207ba",
+                    "description": null,
+                    "first4_digits": "1234",
+                    "last4_digits": "5678",
+                    "card_brand": "Visa",
+                    "expiration_month": "1",
+                    "expiration_year": "77",
+                    "holder_name": "John Doe",
+                    "created_at": "2024-09-27T02:51:20+00:00",
+                    "updated_at": "2024-09-27T02:51:20+00:00"
+                  },
+                  {
+                    "id": "e22f3601-cdcb-468c-bf7c-86284635f29b",
+                    "resource": "card",
+                    "customer": "3750690f-54a0-4d6a-aff8-4070e61207ba",
+                    "description": null,
+                    "first4_digits": "1234",
+                    "last4_digits": "5678",
+                    "card_brand": "MasterCard",
+                    "expiration_month": "1",
+                    "expiration_year": "78",
+                    "holder_name": "John Doe 2",
+                    "created_at": "2024-09-27T02:39:39+00:00",
+                    "updated_at": "2024-09-27T02:39:39+00:00"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+  # Buyers
+  "/marketplace/{marketplace_id}/buyers/{buyer_id}/cards/{card_id}/default":
+    post:
+      operationId: setDefaultCardForBuyer
+      tags:
+        - Buyers/Card
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: buyer_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do comprador
+
+        - in: path
+          name: card_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do cartão de crédito
+      responses:
+        200:
+          description: Definir cartão de crédito padrão para um comprador realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardDefinition"
+              example:
+                id: "6b576cf3-6083-4339-8edc-366fb20bb904"
+                resource: "card"
+                customer: "3750690f-54a0-4d6a-aff8-4070e61207ba"
+                description: null
+                first4_digits: "1234"
+                last4_digits: "5678"
+                card_brand: "Visa"
+                expiration_month: "1"
+                expiration_year: "77"
+                holder_name: "John Doe"
+                created_at: "2024-09-27T01:12:20+00:00"
+                updated_at: "2024-09-27T01:12:20+00:00"
