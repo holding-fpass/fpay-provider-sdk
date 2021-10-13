@@ -313,6 +313,60 @@ components:
           $ref: "#/components/schemas/DateISOReadOnly"
         updated_at:
           $ref: "#/components/schemas/DateISOReadOnly"
+    # Invoice Definition
+    InvoiceDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        resource:
+          enum:
+            - invoice
+        subscription:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+        payment_method:
+          type: string
+          readOnly: true
+        due_date:
+          type: string
+        expiration_date:
+          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+        amount:
+          type: number
+        currency:
+          enum:
+            - BRL
+        paid_at:
+          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+        voided_at:
+          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+        retries:
+          type: number
+          readOnly: true
+        max_retries:
+          type: number
+          readOnly: true
+        status:
+          enum:
+            - paid
+            - pending
+            - canceled
+            - failed
+        metadata:
+          type: object
+          nullable: true
+        created_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
+        updated_at:
+          $ref: "#/components/schemas/DateISOReadOnly"
 servers:
   - url: https://test.api.recebafacil.com
     description: Test
