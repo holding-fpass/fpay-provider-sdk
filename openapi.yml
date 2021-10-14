@@ -15,10 +15,6 @@ components:
       format: uuid
       pattern: ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
       maxLength: 36
-    Password:
-      description: "Senha"
-      type: string
-      pattern: ^(?=.*[a-z])(?=.*[A-Z]).{6,}$
     DateISO:
       description: Data em formato ISO 1806
       type: string
@@ -60,8 +56,9 @@ components:
       type: object
       properties:
         id:
-          type: string
-          readOnly: true
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+            - readOnly: true
         name:
           type: string
         document_number:
@@ -106,16 +103,21 @@ components:
           type: string
           nullable: true
         created_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
         updated_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
     # Card Definition
     CardDefinition:
       type: object
       properties:
         id:
-          type: string
-          readOnly: true
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+            - readOnly: true
         resource:
           enum:
             - card
@@ -138,16 +140,21 @@ components:
         holder_name:
           type: string
         created_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
         updated_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
     # Webhook Definition
     WebhookDefinition:
       type: object
       properties:
         id:
-          type: string
-          readOnly: true
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+            - readOnly: true
         resource:
           enum:
             - event
@@ -221,16 +228,21 @@ components:
             - transfer.failed
             - transfer.succeeded
         created_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
         updated_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
     # Plan Definition
     PlanDefinition:
       type: object
       properties:
         id:
-          type: string
-          readOnly: true
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+            - readOnly: true
         resource:
           enum:
             - plan
@@ -263,16 +275,21 @@ components:
         duration:
           type: number
         created_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
         updated_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
     # Subscription Definition
     SubscriptionDefinition:
       type: object
       properties:
         id:
-          type: string
-          readOnly: true
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+            - readOnly: true
         resource:
           enum:
             - subscription
@@ -292,9 +309,15 @@ components:
         due_date:
           type: string
         due_since_date:
-          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
         expiration_date:
-          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
         amount:
           type: number
           nullable: true
@@ -308,18 +331,26 @@ components:
             - expired
             - suspended
         suspended_at:
-          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
         created_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
         updated_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
     # Invoice Definition
     InvoiceDefinition:
       type: object
       properties:
         id:
-          type: string
-          readOnly: true
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+            - readOnly: true
         resource:
           enum:
             - invoice
@@ -338,16 +369,25 @@ components:
         due_date:
           type: string
         expiration_date:
-          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
         amount:
           type: number
         currency:
           enum:
             - BRL
         paid_at:
-          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
         voided_at:
-          $ref: "#/components/schemas/DateISOReadOnlyNullable"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
         retries:
           type: number
           readOnly: true
@@ -364,9 +404,13 @@ components:
           type: object
           nullable: true
         created_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
         updated_at:
-          $ref: "#/components/schemas/DateISOReadOnly"
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
 servers:
   - url: https://test.api.recebafacil.com
     description: Test
@@ -1510,7 +1554,7 @@ paths:
                 metadata: null
                 created_at: "2024-09-26T17:58:02+00:00"
                 updated_at: "2024-09-26T17:58:12+00:00"
-    # Invoices
+  # Invoices
   "/marketplaces/{marketplace_id}/invoices/{invoice_id}":
     get:
       operationId: getInvoice
@@ -1745,3 +1789,210 @@ paths:
                 metadata: null
                 created_at: "2024-09-26T17:58:02+00:00"
                 updated_at: "2024-09-26T17:58:12+00:00"
+  # Webhook
+  "/marketplaces/{marketplace_id}/webhooks":
+    get:
+      operationId: getWebhooks
+      tags:
+        - Webhooks
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      responses:
+        200:
+          description: Busca por todos os webhooks realizada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/WebhookDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "5ba1586b-95cd-4ff8-98f9-2b5099819333",
+                    "resource": "event",
+                    "endpoint": "https://exmaple.net",
+                    "description": "Webhook transaction capture succeeded",
+                    "event": "transaction.capture.succeeded",
+                    "created_at": "2024-07-23T23:18:12+00:00",
+                    "updated_at": "2024-07-29T22:25:45+00:00"
+                  },
+                  {
+                    "id": "6e7233fb-9b9a-46e1-b54f-fd5c4d19fa63",
+                    "resource": "event",
+                    "endpoint": "https://exmaple.net",
+                    "description": "Webhook transaction pre_authorization succeeded",
+                    "event": "transaction.pre_authorization.succeeded",
+                    "created_at": "2024-07-23T23:18:01+00:00",
+                    "updated_at": "2024-07-29T22:26:04+00:00"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createWebhook
+      tags:
+        - Webhooks
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador marketplace
+      requestBody:
+        description: Informações para criar um webhoook
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebhookDefinition"
+            example:
+              endpoint: "https://exmaple.net"
+              description: "Webhook transaction pre_authorization succeeded"
+              event: "transaction.pre_authorization.succeeded"
+      responses:
+        200:
+          description: Registro de um webhook realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookDefinition"
+              example:
+                id: "5ba1586b-95cd-4ff8-98f9-2b5099819333"
+                resource: "event"
+                endpoint: "https://exmaple.net"
+                description: "Webhook transaction capture succeeded"
+                event: "transaction.capture.succeeded"
+                created_at: "2024-07-23T23:18:12+00:00"
+                updated_at: "2024-07-29T22:25:45+00:00"
+  # Webhook
+  "/marketplaces/{marketplace_id}/webhooks/{webhook_id}":
+    get:
+      operationId: getWebhook
+      tags:
+        - Webhooks
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: webhook_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do webhook
+      responses:
+        200:
+          description: Busca de um webhook realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookDefinition"
+              example:
+                id: "5ba1586b-95cd-4ff8-98f9-2b5099819333"
+                resource: "event"
+                endpoint: "https://exmaple.net"
+                description: "Webhook transaction capture succeeded"
+                event: "transaction.capture.succeeded"
+                created_at: "2024-07-23T23:18:12+00:00"
+                updated_at: "2024-07-29T22:25:45+00:00"
+    put:
+      operationId: updateWebhook
+      tags:
+        - Webhooks
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: webhook_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do webhook
+      requestBody:
+        description: Informações para atualizar um webhook
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebhookDefinition"
+            example:
+              description: Webhook transaction capture succeeded
+      responses:
+        200:
+          description: Webhook atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookDefinition"
+              example:
+                id: "5ba1586b-95cd-4ff8-98f9-2b5099819333"
+                resource: "event"
+                endpoint: "https://exmaple.net"
+                description: "Webhook transaction capture succeeded"
+                event: "transaction.capture.succeeded"
+                created_at: "2024-07-23T23:18:12+00:00"
+                updated_at: "2024-07-29T22:25:45+00:00"
+    delete:
+      operationId: deleteWebhook
+      tags:
+        - Webhooks
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: webhook_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do webhook
+      responses:
+        200:
+          description: Webhook deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Webhook has been deleted
