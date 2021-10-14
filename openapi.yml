@@ -695,7 +695,7 @@ paths:
               example:
                 message: Buyer has been deleted
   # Buyers
-  "/marketplace/{marketplace_id}/buyers/{buyer_id}/cards":
+  "/marketplaces/{marketplace_id}/buyers/{buyer_id}/cards":
     get:
       operationId: getCards
       tags:
@@ -769,7 +769,7 @@ paths:
                 total_pages: 1
                 has_more: false
   # Buyers
-  "/marketplace/{marketplace_id}/buyers/{buyer_id}/cards/{card_id}/default":
+  "/marketplaces/{marketplace_id}/buyers/{buyer_id}/cards/{card_id}/default":
     post:
       operationId: setDefaultCardForBuyer
       tags:
