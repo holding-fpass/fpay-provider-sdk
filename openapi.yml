@@ -914,8 +914,9 @@ paths:
               payment_methods: ["credit"]
               amount: 30000
               setup_amount: 0
-              description: null
+              description: "Assinatura mensal para usuários Premium"
               duration: 1
+              currency: "BRL"
       responses:
         200:
           description: Registro de um plano realizado com sucesso
@@ -1017,6 +1018,7 @@ paths:
               setup_amount: 0
               description: null
               duration: 1
+              currency: "BRL"
       responses:
         200:
           description: Plano atualizado com sucesso
