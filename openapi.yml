@@ -303,10 +303,10 @@ components:
             - BRL
         status:
           enum:
-           - active
-           - canceled
-           - expired
-           - suspended
+            - active
+            - canceled
+            - expired
+            - suspended
         suspended_at:
           $ref: "#/components/schemas/DateISOReadOnlyNullable"
         created_at:
@@ -951,7 +951,7 @@ paths:
         - BasicAuth: []
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -1008,7 +1008,7 @@ paths:
         - BasicAuth: [ ]
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -1207,7 +1207,7 @@ paths:
         - BasicAuth: [ ]
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -1263,7 +1263,7 @@ paths:
         - BasicAuth: [ ]
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -1566,7 +1566,7 @@ paths:
         - BasicAuth: [ ]
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -1625,7 +1625,7 @@ paths:
         - BasicAuth: [ ]
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
