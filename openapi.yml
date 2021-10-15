@@ -106,15 +106,15 @@ components:
       type: object
       properties:
         id:
-          oneOf:
-            - $ref: "#/components/schemas/UUID"
-            - readOnly: true
+          type: string
+          readOnly: true
         resource:
           enum:
             - card
         customer:
           type: string
           readOnly: true
+          nullable: true
         description:
           type: string
           nullable: true
@@ -305,10 +305,7 @@ components:
             - readOnly: true
             - nullable: true
         expiration_date:
-          oneOf:
-            - $ref: "#/components/schemas/DateISO"
-            - readOnly: true
-            - nullable: true
+          type: string
         amount:
           type: number
           nullable: true
@@ -394,6 +391,32 @@ components:
         metadata:
           type: object
           nullable: true
+        created_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        updated_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+    # Token Definition
+    TokenDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        resource:
+          enum:
+            - token
+        used:
+          type: boolean
+          readOnly: true
+        type:
+          enum:
+            - card
+        card:
+          $ref: "#/components/schemas/CardDefinition"
         created_at:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
@@ -1170,7 +1193,7 @@ paths:
               customer: "827ed4e0-ebe0-449f-82d7-03856449299"
               description: Assinatura mensal
               payment_method: "credit"
-              due_date: 2021-08-27
+              due_date: "2021-08-27"
               currency: BRL
       responses:
         200:
@@ -1269,7 +1292,7 @@ paths:
             example:
               description: null
               payment_method: "credit"
-              due_date: "2024-09-11T00:00:00+00:00"
+              due_date: "2024-09-11"
               expiration_date: "2020-12-03"
               amount: 4999
               currency: "BRL"
@@ -1374,9 +1397,9 @@ paths:
                 created_at: "2024-08-11T15:53:12+00:00"
                 updated_at: "2024-08-11T15:53:22+00:00"
   # Subscriptions
-  "/marketplaces/{marketplace_id}/subscriptions/{subscription_id}/reactive":
+  "/marketplaces/{marketplace_id}/subscriptions/{subscription_id}/reactivate":
     post:
-      operationId: reactiveSubscription
+      operationId: reactivateSubscription
       tags:
         - Subscriptions
       security:
@@ -1521,8 +1544,8 @@ paths:
               customer: "827ed4e0-ebe0-449f-82d7-03856449299"
               description: Fatura 26/09/2024
               payment_method: credit
-              due_date: 2024-08-27
-              expiration_date: 2024-08-26
+              due_date: "2024-08-27"
+              expiration_date: "2024-08-26"
               amount: 3000
               currency: BRL
       responses:
@@ -1628,8 +1651,8 @@ paths:
             example:
               description: Fatura 26/09/2024
               payment_method: credit
-              due_date: 2024-08-27
-              expiration_date: 2024-08-26
+              due_date: "2024-08-27"
+              expiration_date: "2024-08-26"
               amount: 3000
               currency: BRL
       responses:
@@ -1993,3 +2016,188 @@ paths:
                     type: string
               example:
                 message: Webhook has been deleted
+  # Cards
+  "/marketplaces/{marketplace_id}/cards":
+    post:
+      operationId: associateCardWithCustomer
+      tags:
+        - Cards
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      requestBody:
+        description: Informações para associar um cartão de crédito a um comprador
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                customer:
+                  type: string
+      responses:
+        200:
+          description: Associação de um cartão de crédito a um comprador realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardDefinition"
+              example:
+                id: "6b576cf3-6083-4339-8edc-366fb20bb904"
+                resource: "card"
+                customer: "3750690f-54a0-4d6a-aff8-4070e61207ba"
+                description: null
+                first4_digits: "1234"
+                last4_digits: "5678"
+                card_brand: "Visa"
+                expiration_month: "1"
+                expiration_year: "77"
+                holder_name: "John Doe"
+                created_at: "2024-09-27T01:12:20+00:00"
+                updated_at: "2024-09-27T01:12:20+00:00"
+  # Cards
+  "/marketplaces/{marketplace_id}/cards/{card_id}":
+    get:
+      operationId: getCard
+      tags:
+        - Cards
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: card_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do cartão de crédito
+      responses:
+        200:
+          description: Busca de um cartão de crédito realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardDefinition"
+              example:
+                id: "6b576cf3-6083-4339-8edc-366fb20bb904"
+                resource: "card"
+                customer: "3750690f-54a0-4d6a-aff8-4070e61207ba"
+                description: null
+                first4_digits: "1234"
+                last4_digits: "5678"
+                card_brand: "Visa"
+                expiration_month: "1"
+                expiration_year: "77"
+                holder_name: "John Doe"
+                created_at: "2024-09-27T01:12:20+00:00"
+                updated_at: "2024-09-27T01:12:20+00:00"
+    delete:
+      operationId: deleteCard
+      tags:
+        - Cards
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: card_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do cartão de crédito
+      responses:
+        200:
+          description: Cartão crédito deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Webhook has been deleted
+  # Cards
+  "/marketplaces/{marketplace_id}/cards/tokens":
+    post:
+      operationId: generateCardToken
+      tags:
+        - Cards
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      requestBody:
+        description: Informações para gerar um token de um cartão de crédito
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                holder_name:
+                  type: string
+                expiration_month:
+                  type: string
+                expiration_year:
+                  type: string
+                card_number:
+                  type: string
+                security_code:
+                  type: string
+      responses:
+        200:
+          description: Registro de um cartão de crédito realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenDefinition"
+              example:
+                id: "529b3010536b4b5a919372f99711f08a"
+                resource: "token"
+                used: false
+                type: "card"
+                card:
+                  id: "b876ab6523914be6b6dcace58845a753"
+                  resource: "card"
+                  description: null
+                  card_brand: "MasterCard"
+                  first4_digits: "1234"
+                  expiration_month: "1"
+                  expiration_year: "77"
+                  holder_name: "John Doe"
+                  is_active: false
+                  is_valid: true
+                  is_verified: false
+                  customer: null
+                  verification_checklist:
+                    postal_code_check: "unchecked"
+                    security_code_check: "unchecked"
+                    address_line1_check: "unchecked"
+                  created_at: "2021-09-14T15:45:54+00:00"
+                  updated_at: "2021-09-14T15:45:54+00:00"
+                created_at: "2021-09-14T15:45:54+00:00"
+                updated_at: "2021-09-14T15:45:54+00:00"
