@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: FPay Provider API
-  version: 0.0.1
+  version: 1.4.2
 components:
   securitySchemes:
     BasicAuth:
