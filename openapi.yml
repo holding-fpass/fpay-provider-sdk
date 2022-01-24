@@ -427,7 +427,9 @@ components:
             - readOnly: true
 servers:
   - url: https://test.api.recebafacil.com
-    description: Test
+    description: Test Environment
+  - url: https://api.recebafacil.com
+    description: Production Environment
 paths:
   # Buyers
   "/marketplaces/{marketaplace_id}/buyers":
@@ -794,7 +796,7 @@ paths:
   # Buyers
   "/marketplaces/{marketplace_id}/buyers/{buyer_id}/cards/{card_id}/default":
     post:
-      operationId: setDefaultCardForBuyer
+      operationId: setDefaultCardForCustomer
       tags:
         - Buyers/Card
       security:
@@ -840,6 +842,134 @@ paths:
                 holder_name: "John Doe"
                 created_at: "2024-09-27T01:12:20+00:00"
                 updated_at: "2024-09-27T01:12:20+00:00"
+  # Buyers
+  "/marketplaces/{marketplace_id}/buyers/{buyer_id}/cards/default":
+    get:
+      operationId: getCustomerDefaultCard
+      tags:
+        - Buyers/Card
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: buyer_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do comprador
+      responses:
+        200:
+          description: Busca por cartão de crédito padrão de um comprador realilzada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardDefinition"
+              example:
+                id: "6b576cf3-6083-4339-8edc-366fb20bb904"
+                resource: "card"
+                customer: "3750690f-54a0-4d6a-aff8-4070e61207ba"
+                description: null
+                first4_digits: "1234"
+                last4_digits: "5678"
+                card_brand: "Visa"
+                expiration_month: "1"
+                expiration_year: "77"
+                holder_name: "John Doe"
+                created_at: "2024-09-27T01:12:20+00:00"
+                updated_at: "2024-09-27T01:12:20+00:00"
+  # Buyers
+  "/marketplaces/{marketplace_id}/buyers/{buyer_id}/invoices":
+    get:
+      operationId: getInvoicesByBuyer
+      tags:
+        - Buyers/Invoices
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: buyer_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do comprador
+      responses:
+        200:
+          description: Busca por todas as faturas de um comprador realilzada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/InvoiceDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "c9bf8d3d-81bc-4b5f-9ce3-503a906cbcb1",
+                    "resource": "invoice",
+                    "subscription": "95cea181-09dc-4a2c-84ac-eee3cfa7557b",
+                    "customer": "50002e20-018f-458b-9f80-5f4bbb342664",
+                    "description": null,
+                    "payment_method": "credit",
+                    "due_date": "2024-09-26T20:58:01+00:00",
+                    "expiration_date": null,
+                    "amount": 3000,
+                    "currency": "BRL",
+                    "paid_at": null,
+                    "voided_at": null,
+                    "retries": 0,
+                    "max_retries": 3,
+                    "status": "pending",
+                    "metadata": null,
+                    "created_at": "2024-09-26T17:58:02+00:00",
+                    "updated_at": "2024-09-26T17:58:12+00:00"
+                  },
+                  {
+                    "id": "20d51061-a14a-4e35-95b6-ec836e518a1e",
+                    "resource": "invoice",
+                    "subscription": "3c4beb93-e144-4e21-9d6d-4395bcc1f3ea",
+                    "customer": "50002e20-018f-458b-9f80-5f4bbb342664",
+                    "description": null,
+                    "payment_method": "credit",
+                    "due_date": "2024-09-26T00:00:00+00:00",
+                    "expiration_date": null,
+                    "amount": 3000,
+                    "currency": "BRL",
+                    "paid_at": "2024-09-26T20:35:13+00:00",
+                    "voided_at": null,
+                    "retries": 0,
+                    "max_retries": 3,
+                    "status": "paid",
+                    "metadata": null,
+                    "created_at": "2024-09-26T17:34:17+00:00",
+                    "updated_at": "2024-09-26T17:35:22+00:00"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
   # Plans
   "/marketplaces/{marketplace_id}/plans":
     get:
