@@ -1,0 +1,25 @@
+{
+  "name": "@holding-fpass/fpay-provider-sdk",
+  "version": "0.34.1",
+  "description": "FPay Provider API",
+  "author": "FPASS Tech Team",
+  "license": "Unlicense",
+  "main": "./dist-sdk/index.js",
+  "typings": "./dist-sdk/index.d.ts",
+  "private": false,
+  "scripts": {
+    "sdk:prebuild": "rimraf src-openapi && rimraf dist-sdk",
+    "sdk:generate": "yarn openapi-generator-cli generate -i openapi.yaml -g typescript-axios -o src-openapi",
+    "sdk:build": "yarn sdk:prebuild && yarn sdk:generate && tsc --p tsconfig-sdk.json",
+    "sdk:build:publish": "yarn sdk:build && npm publish"
+  },
+  "dependencies": {
+    "axios": "^0.24.0"
+  },
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.4.21",
+    "@types/node": "^12.11.5",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.6.4"
+  }
+}
