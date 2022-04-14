@@ -8,6 +8,9 @@
   "typings": "./dist-sdk/index.d.ts",
   "private": false,
   "scripts": {
+    "patch": "npm version patch && yarn sdk:build:publish",
+    "minor": "npm version minor && yarn sdk:build:publish",
+    "major": "npm version major && yarn sdk:build:publish",
     "sdk:prebuild": "rimraf src-openapi && rimraf dist-sdk",
     "sdk:generate": "yarn openapi-generator-cli generate -i openapi.yaml -g typescript-axios -o src-openapi",
     "sdk:build": "yarn sdk:prebuild && yarn sdk:generate && tsc --p tsconfig-sdk.json",
