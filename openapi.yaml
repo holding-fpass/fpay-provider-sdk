@@ -101,6 +101,75 @@ components:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
             - readOnly: true
+    # Boleto Definition
+    BoletoDefinition:
+      type: object
+      properties:
+        id:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+            - readOnly: true
+        resource:
+          enum:
+            - boleto
+        customer:
+          type: string
+          readOnly: true
+        status:
+          enum:
+            - paid
+            - not_paid
+        description:
+          type: string
+          nullable: true
+        expiration_date:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+        payment_limit_date:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - nullable: true
+        paid_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
+        bank_code:
+          type: string
+          readOnly: true
+        recipient:
+          type: string
+          readOnly: true
+        uri:
+          type: string
+          readOnly: true
+        barcode:
+          type: string
+          readOnly: true
+        address:
+          type: string
+          readOnly: true
+          nullable: true
+        accepted:
+          type: boolean
+          readOnly: true
+        printed:
+          type: boolean
+          readOnly: true
+        downloaded:
+          type: boolean
+          readOnly: true
+        metadata:
+          type: object
+          nullable: true
+        created_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        updated_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
     # Card Definition
     CardDefinition:
       type: object
@@ -276,36 +345,48 @@ components:
     # Subscription Definition
     SubscriptionDefinition:
       type: object
+      required:
+        - id
+        - resource
+        - plan
+        - customer
+        - payment_method
+        - due_date
+        - expiration_date
+        - currency
+        - status
+        - suspended_at
+        - created_at
+        - updated_at
       properties:
         id:
           oneOf:
             - $ref: "#/components/schemas/UUID"
-            - readOnly: true
+          readOnly: true
         resource:
           enum:
             - subscription
           readOnly: true
         plan:
           type: string
-          readOnly: true
         customer:
           type: string
-          readOnly: true
         description:
           type: string
           nullable: true
         payment_method:
-          type: string
-          readOnly: true
+          enum:
+            - credit
         due_date:
-          type: string
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
         due_since_date:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
-            - readOnly: true
-            - nullable: true
+          nullable: true
         expiration_date:
           type: string
+          readOnly: true
         amount:
           type: number
           nullable: true
@@ -318,19 +399,20 @@ components:
             - canceled
             - expired
             - suspended
+          readOnly: true
         suspended_at:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
-            - readOnly: true
-            - nullable: true
+          nullable: true
+          readOnly: true
         created_at:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
-            - readOnly: true
+          readOnly: true
         updated_at:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
-            - readOnly: true
+          readOnly: true
     # Invoice Definition
     InvoiceDefinition:
       type: object
@@ -417,6 +499,159 @@ components:
             - card
         card:
           $ref: "#/components/schemas/CardDefinition"
+        created_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        updated_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+    # Transaction Definition
+    TransactionDefinition:
+      type: object
+      properties:
+        id:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        resource:
+          enum:
+            - transaction
+          readOnly: true
+        on_behalf_of:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+          readOnly: true
+          nullable: true
+        status:
+          enum:
+            - new
+            - pending
+            - pre_authorized
+            - succeeded
+            - canceled
+            - failed
+            - reversed
+            - refunded
+            - dispute
+            - charge_back
+        amount:
+          type: number
+        originalAmount:
+          type: number
+          readOnly: true
+        currency:
+          enum:
+            - BRL
+        description:
+          type: string
+          nullable: true
+        statement_descriptor:
+          type: string
+          nullable: true
+        payment_type:
+          enum:
+            - credit
+            - boleto
+        payment_method:
+          oneOf:
+            - $ref: "#/components/schemas/CardDefinition"
+            - $ref: "#/components/schemas/BoletoDefinition"
+            - readOnly: true
+          discriminator:
+            propertyName: resource
+        transaction_number:
+          type: string
+          readOnly: true
+        gateway_authorizer:
+          type: string
+          readOnly: true
+        sales_receipt:
+          type: string
+          readOnly: true
+        installment_plan:
+          type: number
+          nullable: true
+        refunded:
+          type: boolean
+          readOnly: true
+        voided:
+          type: boolean
+          readOnly: true
+        captured:
+          type: boolean
+          readOnly: true
+        fees:
+          type: string
+          readOnly: true
+        expected_on:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        voided_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
+        history:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                readOnly: true
+              amount:
+                type: string
+                readOnly: true
+              status:
+                enum:
+                  - new
+                  - pending
+                  - pre_authorized
+                  - succeeded
+                  - canceled
+                  - failed
+                  - reversed
+                  - refunded
+                  - dispute
+                  - charge_back
+              authorizer:
+                type: string
+                readOnly: true
+              created_at:
+                type: string
+                readOnly: true
+              transaction:
+                type: string
+                readOnly: true
+              authorizer_id:
+                type: string
+                readOnly: true
+              response_code:
+                type: string
+                readOnly: true
+              operation_type:
+                type: string
+                readOnly: true
+              response_message:
+                type: string
+                readOnly: true
+              authorization_nsu:
+                type: string
+                readOnly: true
+              authorization_code:
+                type: string
+                readOnly: true
+              gatewayResponseTime:
+                type: string
+                readOnly: true
+        metadata:
+          type: object
+          nullable: true
         created_at:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
@@ -1254,7 +1489,23 @@ paths:
                       items:
                         type: array
                         items:
-                          $ref: "#/components/schemas/SubscriptionDefinition"
+                          allOf:
+                            - $ref: "#/components/schemas/SubscriptionDefinition"
+                            - type: object
+                              required:
+                                - due_since_date
+                                - amount
+                                - description
+                              properties:
+                                due_since_date:
+                                  nullable: true
+                                  readOnly: true
+                                amount:
+                                  nullable: true
+                                  readOnly: true
+                                description:
+                                  nullable: true
+                                  readOnly: true
               example:
                 resource: "list"
                 items: [
@@ -1331,7 +1582,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubscriptionDefinition"
+                allOf:
+                  - $ref: "#/components/schemas/SubscriptionDefinition"
+                  - type: object
+                    required:
+                      - due_since_date
+                      - amount
+                      - description
+                    properties:
+                      due_since_date:
+                        nullable: true
+                        readOnly: true
+                      amount:
+                        nullable: true
+                        readOnly: true
+                      description:
+                        nullable: true
+                        readOnly: true
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
@@ -1376,7 +1643,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubscriptionDefinition"
+                allOf:
+                  - $ref: "#/components/schemas/SubscriptionDefinition"
+                  - type: object
+                    required:
+                      - due_since_date
+                      - amount
+                      - description
+                    properties:
+                      due_since_date:
+                        nullable: true
+                        readOnly: true
+                      amount:
+                        nullable: true
+                        readOnly: true
+                      description:
+                        nullable: true
+                        readOnly: true
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
@@ -1432,7 +1715,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubscriptionDefinition"
+                allOf:
+                  - $ref: "#/components/schemas/SubscriptionDefinition"
+                  - type: object
+                    required:
+                      - due_since_date
+                      - amount
+                      - description
+                    properties:
+                      due_since_date:
+                        nullable: true
+                        readOnly: true
+                      amount:
+                        nullable: true
+                        readOnly: true
+                      description:
+                        nullable: true
+                        readOnly: true
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
@@ -1509,7 +1808,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubscriptionDefinition"
+                allOf:
+                  - $ref: "#/components/schemas/SubscriptionDefinition"
+                  - type: object
+                    required:
+                      - due_since_date
+                      - amount
+                      - description
+                    properties:
+                      due_since_date:
+                        nullable: true
+                        readOnly: true
+                      amount:
+                        nullable: true
+                        readOnly: true
+                      description:
+                        nullable: true
+                        readOnly: true
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
@@ -1554,7 +1869,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubscriptionDefinition"
+                allOf:
+                  - $ref: "#/components/schemas/SubscriptionDefinition"
+                  - type: object
+                    required:
+                      - due_since_date
+                      - amount
+                      - description
+                    properties:
+                      due_since_date:
+                        nullable: true
+                        readOnly: true
+                      amount:
+                        nullable: true
+                        readOnly: true
+                      description:
+                        nullable: true
+                        readOnly: true
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
