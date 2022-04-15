@@ -1,6 +1,6 @@
 {
   "name": "@holding-fpass/fpay-provider-sdk",
-  "version": "0.34.11",
+  "version": "0.34.12",
   "description": "FPay Provider API",
   "author": "FPASS Tech Team",
   "license": "Unlicense",
