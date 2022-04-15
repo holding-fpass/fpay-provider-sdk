@@ -187,9 +187,9 @@ components:
         description:
           type: string
           nullable: true
-        first4digits:
+        first4_digits:
           type: string
-        last4digits:
+        last4_digits:
           type: string
         card_brand:
           type: string

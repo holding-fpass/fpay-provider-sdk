@@ -24,6 +24,140 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface BoletoDefinition
+ */
+export interface BoletoDefinition {
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'resource'?: BoletoDefinitionResourceEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'customer'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'status'?: BoletoDefinitionStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'description'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'expiration_date'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'payment_limit_date'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'paid_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'bank_code'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'recipient'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'uri'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'barcode'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'address'?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoletoDefinition
+     */
+    'accepted'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoletoDefinition
+     */
+    'printed'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoletoDefinition
+     */
+    'downloaded'?: boolean;
+    /**
+     * 
+     * @type {object}
+     * @memberof BoletoDefinition
+     */
+    'metadata'?: object | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoletoDefinition
+     */
+    'updated_at'?: string;
+}
+
+export const BoletoDefinitionResourceEnum = {
+    Boleto: 'boleto'
+} as const;
+
+export type BoletoDefinitionResourceEnum = typeof BoletoDefinitionResourceEnum[keyof typeof BoletoDefinitionResourceEnum];
+export const BoletoDefinitionStatusEnum = {
+    Paid: 'paid',
+    NotPaid: 'not_paid'
+} as const;
+
+export type BoletoDefinitionStatusEnum = typeof BoletoDefinitionStatusEnum[keyof typeof BoletoDefinitionStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface BuyerDefinition
  */
 export interface BuyerDefinition {
@@ -640,7 +774,7 @@ export interface SubscriptionDefinition {
      * @type {string}
      * @memberof SubscriptionDefinition
      */
-    'payment_method'?: string;
+    'payment_method'?: SubscriptionDefinitionPaymentMethodEnum;
     /**
      * 
      * @type {string}
@@ -652,7 +786,7 @@ export interface SubscriptionDefinition {
      * @type {string}
      * @memberof SubscriptionDefinition
      */
-    'due_since_date'?: string;
+    'due_since_date'?: string | null;
     /**
      * 
      * @type {string}
@@ -682,7 +816,7 @@ export interface SubscriptionDefinition {
      * @type {string}
      * @memberof SubscriptionDefinition
      */
-    'suspended_at'?: string;
+    'suspended_at'?: string | null;
     /**
      * 
      * @type {string}
@@ -702,6 +836,11 @@ export const SubscriptionDefinitionResourceEnum = {
 } as const;
 
 export type SubscriptionDefinitionResourceEnum = typeof SubscriptionDefinitionResourceEnum[keyof typeof SubscriptionDefinitionResourceEnum];
+export const SubscriptionDefinitionPaymentMethodEnum = {
+    Credit: 'credit'
+} as const;
+
+export type SubscriptionDefinitionPaymentMethodEnum = typeof SubscriptionDefinitionPaymentMethodEnum[keyof typeof SubscriptionDefinitionPaymentMethodEnum];
 export const SubscriptionDefinitionCurrencyEnum = {
     Brl: 'BRL'
 } as const;
@@ -776,6 +915,302 @@ export const TokenDefinitionTypeEnum = {
 } as const;
 
 export type TokenDefinitionTypeEnum = typeof TokenDefinitionTypeEnum[keyof typeof TokenDefinitionTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface TransactionDefinition
+ */
+export interface TransactionDefinition {
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'resource'?: TransactionDefinitionResourceEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'on_behalf_of'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'customer'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'status'?: TransactionDefinitionStatusEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof TransactionDefinition
+     */
+    'amount'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TransactionDefinition
+     */
+    'originalAmount'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'currency'?: TransactionDefinitionCurrencyEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'description'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'statement_descriptor'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'payment_type'?: TransactionDefinitionPaymentTypeEnum;
+    /**
+     * 
+     * @type {CardDefinition | BoletoDefinition}
+     * @memberof TransactionDefinition
+     */
+    'payment_method'?: CardDefinition | BoletoDefinition;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'transaction_number'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'gateway_authorizer'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'sales_receipt'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TransactionDefinition
+     */
+    'installment_plan'?: number | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TransactionDefinition
+     */
+    'refunded'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TransactionDefinition
+     */
+    'voided'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TransactionDefinition
+     */
+    'captured'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'fees'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'expected_on'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'voided_at'?: string;
+    /**
+     * 
+     * @type {Array<TransactionDefinitionHistory>}
+     * @memberof TransactionDefinition
+     */
+    'history'?: Array<TransactionDefinitionHistory>;
+    /**
+     * 
+     * @type {object}
+     * @memberof TransactionDefinition
+     */
+    'metadata'?: object | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinition
+     */
+    'updated_at'?: string;
+}
+
+export const TransactionDefinitionResourceEnum = {
+    Transaction: 'transaction'
+} as const;
+
+export type TransactionDefinitionResourceEnum = typeof TransactionDefinitionResourceEnum[keyof typeof TransactionDefinitionResourceEnum];
+export const TransactionDefinitionStatusEnum = {
+    New: 'new',
+    Pending: 'pending',
+    PreAuthorized: 'pre_authorized',
+    Succeeded: 'succeeded',
+    Canceled: 'canceled',
+    Failed: 'failed',
+    Reversed: 'reversed',
+    Refunded: 'refunded',
+    Dispute: 'dispute',
+    ChargeBack: 'charge_back'
+} as const;
+
+export type TransactionDefinitionStatusEnum = typeof TransactionDefinitionStatusEnum[keyof typeof TransactionDefinitionStatusEnum];
+export const TransactionDefinitionCurrencyEnum = {
+    Brl: 'BRL'
+} as const;
+
+export type TransactionDefinitionCurrencyEnum = typeof TransactionDefinitionCurrencyEnum[keyof typeof TransactionDefinitionCurrencyEnum];
+export const TransactionDefinitionPaymentTypeEnum = {
+    Credit: 'credit',
+    Boleto: 'boleto'
+} as const;
+
+export type TransactionDefinitionPaymentTypeEnum = typeof TransactionDefinitionPaymentTypeEnum[keyof typeof TransactionDefinitionPaymentTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface TransactionDefinitionHistory
+ */
+export interface TransactionDefinitionHistory {
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'amount'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'status'?: TransactionDefinitionHistoryStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'authorizer'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'transaction'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'authorizer_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'response_code'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'operation_type'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'response_message'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'authorization_nsu'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'authorization_code'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionDefinitionHistory
+     */
+    'gatewayResponseTime'?: string;
+}
+
+export const TransactionDefinitionHistoryStatusEnum = {
+    New: 'new',
+    Pending: 'pending',
+    PreAuthorized: 'pre_authorized',
+    Succeeded: 'succeeded',
+    Canceled: 'canceled',
+    Failed: 'failed',
+    Reversed: 'reversed',
+    Refunded: 'refunded',
+    Dispute: 'dispute',
+    ChargeBack: 'charge_back'
+} as const;
+
+export type TransactionDefinitionHistoryStatusEnum = typeof TransactionDefinitionHistoryStatusEnum[keyof typeof TransactionDefinitionHistoryStatusEnum];
 
 /**
  * 
@@ -3306,7 +3741,7 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createSubscription(marketplaceId: string, subscriptionDefinition?: SubscriptionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition>> {
+        async createSubscription(marketplaceId: string, subscriptionDefinition?: SubscriptionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition & object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createSubscription(marketplaceId, subscriptionDefinition, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3317,7 +3752,7 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSubscription(marketplaceId: string, subscriptionId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition>> {
+        async getSubscription(marketplaceId: string, subscriptionId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition & object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSubscription(marketplaceId, subscriptionId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3338,7 +3773,7 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reactivateSubscription(marketplaceId: string, subscriptionId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition>> {
+        async reactivateSubscription(marketplaceId: string, subscriptionId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition & object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.reactivateSubscription(marketplaceId, subscriptionId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3349,7 +3784,7 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async suspendSubscription(marketplaceId: string, subscriptionId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition>> {
+        async suspendSubscription(marketplaceId: string, subscriptionId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition & object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.suspendSubscription(marketplaceId, subscriptionId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3361,7 +3796,7 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateSubscription(marketplaceId: string, subscriptionId: string, subscriptionDefinition?: SubscriptionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition>> {
+        async updateSubscription(marketplaceId: string, subscriptionId: string, subscriptionDefinition?: SubscriptionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionDefinition & object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateSubscription(marketplaceId, subscriptionId, subscriptionDefinition, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3392,7 +3827,7 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createSubscription(marketplaceId: string, subscriptionDefinition?: SubscriptionDefinition, options?: any): AxiosPromise<SubscriptionDefinition> {
+        createSubscription(marketplaceId: string, subscriptionDefinition?: SubscriptionDefinition, options?: any): AxiosPromise<SubscriptionDefinition & object> {
             return localVarFp.createSubscription(marketplaceId, subscriptionDefinition, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3402,7 +3837,7 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubscription(marketplaceId: string, subscriptionId: string, options?: any): AxiosPromise<SubscriptionDefinition> {
+        getSubscription(marketplaceId: string, subscriptionId: string, options?: any): AxiosPromise<SubscriptionDefinition & object> {
             return localVarFp.getSubscription(marketplaceId, subscriptionId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3421,7 +3856,7 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reactivateSubscription(marketplaceId: string, subscriptionId: string, options?: any): AxiosPromise<SubscriptionDefinition> {
+        reactivateSubscription(marketplaceId: string, subscriptionId: string, options?: any): AxiosPromise<SubscriptionDefinition & object> {
             return localVarFp.reactivateSubscription(marketplaceId, subscriptionId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3431,7 +3866,7 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        suspendSubscription(marketplaceId: string, subscriptionId: string, options?: any): AxiosPromise<SubscriptionDefinition> {
+        suspendSubscription(marketplaceId: string, subscriptionId: string, options?: any): AxiosPromise<SubscriptionDefinition & object> {
             return localVarFp.suspendSubscription(marketplaceId, subscriptionId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3442,7 +3877,7 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateSubscription(marketplaceId: string, subscriptionId: string, subscriptionDefinition?: SubscriptionDefinition, options?: any): AxiosPromise<SubscriptionDefinition> {
+        updateSubscription(marketplaceId: string, subscriptionId: string, subscriptionDefinition?: SubscriptionDefinition, options?: any): AxiosPromise<SubscriptionDefinition & object> {
             return localVarFp.updateSubscription(marketplaceId, subscriptionId, subscriptionDefinition, options).then((request) => request(axios, basePath));
         },
     };
@@ -3537,6 +3972,118 @@ export class SubscriptionsApi extends BaseAPI {
      */
     public updateSubscription(marketplaceId: string, subscriptionId: string, subscriptionDefinition?: SubscriptionDefinition, options?: AxiosRequestConfig) {
         return SubscriptionsApiFp(this.configuration).updateSubscription(marketplaceId, subscriptionId, subscriptionDefinition, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * TransactionsApi - axios parameter creator
+ * @export
+ */
+export const TransactionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTransaction: async (marketplaceId: string, transactionDefinition?: TransactionDefinition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'marketplaceId' is not null or undefined
+            assertParamExists('createTransaction', 'marketplaceId', marketplaceId)
+            const localVarPath = `/marketplaces/{marketplace_id}/transactions`
+                .replace(`{${"marketplace_id"}}`, encodeURIComponent(String(marketplaceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication BasicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(transactionDefinition, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TransactionsApi - functional programming interface
+ * @export
+ */
+export const TransactionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TransactionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTransaction(marketplaceId, transactionDefinition, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * TransactionsApi - factory interface
+ * @export
+ */
+export const TransactionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TransactionsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: any): AxiosPromise<TransactionDefinition> {
+            return localVarFp.createTransaction(marketplaceId, transactionDefinition, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TransactionsApi - object-oriented interface
+ * @export
+ * @class TransactionsApi
+ * @extends {BaseAPI}
+ */
+export class TransactionsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} marketplaceId Identificador do marketplace
+     * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig) {
+        return TransactionsApiFp(this.configuration).createTransaction(marketplaceId, transactionDefinition, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

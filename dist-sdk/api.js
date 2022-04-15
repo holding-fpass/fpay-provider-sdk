@@ -76,13 +76,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WebhooksApi = exports.WebhooksApiFactory = exports.WebhooksApiFp = exports.WebhooksApiAxiosParamCreator = exports.SubscriptionsApi = exports.SubscriptionsApiFactory = exports.SubscriptionsApiFp = exports.SubscriptionsApiAxiosParamCreator = exports.PlansApi = exports.PlansApiFactory = exports.PlansApiFp = exports.PlansApiAxiosParamCreator = exports.InvoicesApi = exports.InvoicesApiFactory = exports.InvoicesApiFp = exports.InvoicesApiAxiosParamCreator = exports.CardsApi = exports.CardsApiFactory = exports.CardsApiFp = exports.CardsApiAxiosParamCreator = exports.BuyersInvoicesApi = exports.BuyersInvoicesApiFactory = exports.BuyersInvoicesApiFp = exports.BuyersInvoicesApiAxiosParamCreator = exports.BuyersCardApi = exports.BuyersCardApiFactory = exports.BuyersCardApiFp = exports.BuyersCardApiAxiosParamCreator = exports.BuyersApi = exports.BuyersApiFactory = exports.BuyersApiFp = exports.BuyersApiAxiosParamCreator = exports.WebhookDefinitionEventEnum = exports.WebhookDefinitionResourceEnum = exports.TokenDefinitionTypeEnum = exports.TokenDefinitionResourceEnum = exports.SubscriptionDefinitionStatusEnum = exports.SubscriptionDefinitionCurrencyEnum = exports.SubscriptionDefinitionResourceEnum = exports.PlanDefinitionCurrencyEnum = exports.PlanDefinitionFrequencyEnum = exports.PlanDefinitionResourceEnum = exports.ListDefinitionResourceEnum = exports.InvoiceDefinitionStatusEnum = exports.InvoiceDefinitionCurrencyEnum = exports.InvoiceDefinitionResourceEnum = exports.CardDefinitionResourceEnum = void 0;
+exports.WebhooksApi = exports.WebhooksApiFactory = exports.WebhooksApiFp = exports.WebhooksApiAxiosParamCreator = exports.TransactionsApi = exports.TransactionsApiFactory = exports.TransactionsApiFp = exports.TransactionsApiAxiosParamCreator = exports.SubscriptionsApi = exports.SubscriptionsApiFactory = exports.SubscriptionsApiFp = exports.SubscriptionsApiAxiosParamCreator = exports.PlansApi = exports.PlansApiFactory = exports.PlansApiFp = exports.PlansApiAxiosParamCreator = exports.InvoicesApi = exports.InvoicesApiFactory = exports.InvoicesApiFp = exports.InvoicesApiAxiosParamCreator = exports.CardsApi = exports.CardsApiFactory = exports.CardsApiFp = exports.CardsApiAxiosParamCreator = exports.BuyersInvoicesApi = exports.BuyersInvoicesApiFactory = exports.BuyersInvoicesApiFp = exports.BuyersInvoicesApiAxiosParamCreator = exports.BuyersCardApi = exports.BuyersCardApiFactory = exports.BuyersCardApiFp = exports.BuyersCardApiAxiosParamCreator = exports.BuyersApi = exports.BuyersApiFactory = exports.BuyersApiFp = exports.BuyersApiAxiosParamCreator = exports.WebhookDefinitionEventEnum = exports.WebhookDefinitionResourceEnum = exports.TransactionDefinitionHistoryStatusEnum = exports.TransactionDefinitionPaymentTypeEnum = exports.TransactionDefinitionCurrencyEnum = exports.TransactionDefinitionStatusEnum = exports.TransactionDefinitionResourceEnum = exports.TokenDefinitionTypeEnum = exports.TokenDefinitionResourceEnum = exports.SubscriptionDefinitionStatusEnum = exports.SubscriptionDefinitionCurrencyEnum = exports.SubscriptionDefinitionPaymentMethodEnum = exports.SubscriptionDefinitionResourceEnum = exports.PlanDefinitionCurrencyEnum = exports.PlanDefinitionFrequencyEnum = exports.PlanDefinitionResourceEnum = exports.ListDefinitionResourceEnum = exports.InvoiceDefinitionStatusEnum = exports.InvoiceDefinitionCurrencyEnum = exports.InvoiceDefinitionResourceEnum = exports.CardDefinitionResourceEnum = exports.BoletoDefinitionStatusEnum = exports.BoletoDefinitionResourceEnum = void 0;
 var axios_1 = __importDefault(require("axios"));
 // Some imports not used depending on template conditions
 // @ts-ignore
 var common_1 = require("./common");
 // @ts-ignore
 var base_1 = require("./base");
+exports.BoletoDefinitionResourceEnum = {
+    Boleto: 'boleto'
+};
+exports.BoletoDefinitionStatusEnum = {
+    Paid: 'paid',
+    NotPaid: 'not_paid'
+};
 exports.CardDefinitionResourceEnum = {
     Card: 'card'
 };
@@ -116,6 +123,9 @@ exports.PlanDefinitionCurrencyEnum = {
 exports.SubscriptionDefinitionResourceEnum = {
     Subscription: 'subscription'
 };
+exports.SubscriptionDefinitionPaymentMethodEnum = {
+    Credit: 'credit'
+};
 exports.SubscriptionDefinitionCurrencyEnum = {
     Brl: 'BRL'
 };
@@ -130,6 +140,40 @@ exports.TokenDefinitionResourceEnum = {
 };
 exports.TokenDefinitionTypeEnum = {
     Card: 'card'
+};
+exports.TransactionDefinitionResourceEnum = {
+    Transaction: 'transaction'
+};
+exports.TransactionDefinitionStatusEnum = {
+    New: 'new',
+    Pending: 'pending',
+    PreAuthorized: 'pre_authorized',
+    Succeeded: 'succeeded',
+    Canceled: 'canceled',
+    Failed: 'failed',
+    Reversed: 'reversed',
+    Refunded: 'refunded',
+    Dispute: 'dispute',
+    ChargeBack: 'charge_back'
+};
+exports.TransactionDefinitionCurrencyEnum = {
+    Brl: 'BRL'
+};
+exports.TransactionDefinitionPaymentTypeEnum = {
+    Credit: 'credit',
+    Boleto: 'boleto'
+};
+exports.TransactionDefinitionHistoryStatusEnum = {
+    New: 'new',
+    Pending: 'pending',
+    PreAuthorized: 'pre_authorized',
+    Succeeded: 'succeeded',
+    Canceled: 'canceled',
+    Failed: 'failed',
+    Reversed: 'reversed',
+    Refunded: 'refunded',
+    Dispute: 'dispute',
+    ChargeBack: 'charge_back'
 };
 exports.WebhookDefinitionResourceEnum = {
     Event: 'event'
@@ -3074,6 +3118,127 @@ var SubscriptionsApi = /** @class */ (function (_super) {
     return SubscriptionsApi;
 }(base_1.BaseAPI));
 exports.SubscriptionsApi = SubscriptionsApi;
+/**
+ * TransactionsApi - axios parameter creator
+ * @export
+ */
+exports.TransactionsApiAxiosParamCreator = function (configuration) {
+    var _this = this;
+    return {
+        /**
+         *
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTransaction: function (marketplaceId, transactionDefinition, options) {
+            if (options === void 0) { options = {}; }
+            return __awaiter(_this, void 0, void 0, function () {
+                var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
+                return __generator(this, function (_a) {
+                    // verify required parameter 'marketplaceId' is not null or undefined
+                    common_1.assertParamExists('createTransaction', 'marketplaceId', marketplaceId);
+                    localVarPath = "/marketplaces/{marketplace_id}/transactions"
+                        .replace("{" + "marketplace_id" + "}", encodeURIComponent(String(marketplaceId)));
+                    localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+                    if (configuration) {
+                        baseOptions = configuration.baseOptions;
+                    }
+                    localVarRequestOptions = __assign(__assign({ method: 'POST' }, baseOptions), options);
+                    localVarHeaderParameter = {};
+                    localVarQueryParameter = {};
+                    // authentication BasicAuth required
+                    // http basic authentication required
+                    common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    localVarHeaderParameter['Content-Type'] = 'application/json';
+                    common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+                    headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+                    localVarRequestOptions.headers = __assign(__assign(__assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+                    localVarRequestOptions.data = common_1.serializeDataIfNeeded(transactionDefinition, localVarRequestOptions, configuration);
+                    return [2 /*return*/, {
+                            url: common_1.toPathString(localVarUrlObj),
+                            options: localVarRequestOptions,
+                        }];
+                });
+            });
+        },
+    };
+};
+/**
+ * TransactionsApi - functional programming interface
+ * @export
+ */
+exports.TransactionsApiFp = function (configuration) {
+    var localVarAxiosParamCreator = exports.TransactionsApiAxiosParamCreator(configuration);
+    return {
+        /**
+         *
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTransaction: function (marketplaceId, transactionDefinition, options) {
+            return __awaiter(this, void 0, void 0, function () {
+                var localVarAxiosArgs;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.createTransaction(marketplaceId, transactionDefinition, options)];
+                        case 1:
+                            localVarAxiosArgs = _a.sent();
+                            return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
+                    }
+                });
+            });
+        },
+    };
+};
+/**
+ * TransactionsApi - factory interface
+ * @export
+ */
+exports.TransactionsApiFactory = function (configuration, basePath, axios) {
+    var localVarFp = exports.TransactionsApiFp(configuration);
+    return {
+        /**
+         *
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTransaction: function (marketplaceId, transactionDefinition, options) {
+            return localVarFp.createTransaction(marketplaceId, transactionDefinition, options).then(function (request) { return request(axios, basePath); });
+        },
+    };
+};
+/**
+ * TransactionsApi - object-oriented interface
+ * @export
+ * @class TransactionsApi
+ * @extends {BaseAPI}
+ */
+var TransactionsApi = /** @class */ (function (_super) {
+    __extends(TransactionsApi, _super);
+    function TransactionsApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     *
+     * @param {string} marketplaceId Identificador do marketplace
+     * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    TransactionsApi.prototype.createTransaction = function (marketplaceId, transactionDefinition, options) {
+        var _this = this;
+        return exports.TransactionsApiFp(this.configuration).createTransaction(marketplaceId, transactionDefinition, options).then(function (request) { return request(_this.axios, _this.basePath); });
+    };
+    return TransactionsApi;
+}(base_1.BaseAPI));
+exports.TransactionsApi = TransactionsApi;
 /**
  * WebhooksApi - axios parameter creator
  * @export
