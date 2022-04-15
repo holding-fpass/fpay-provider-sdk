@@ -345,19 +345,6 @@ components:
     # Subscription Definition
     SubscriptionDefinition:
       type: object
-      required:
-        - id
-        - resource
-        - plan
-        - customer
-        - payment_method
-        - due_date
-        - expiration_date
-        - currency
-        - status
-        - suspended_at
-        - created_at
-        - updated_at
       properties:
         id:
           oneOf:
@@ -2662,3 +2649,106 @@ paths:
                   updated_at: "2021-09-14T15:45:54+00:00"
                 created_at: "2021-09-14T15:45:54+00:00"
                 updated_at: "2021-09-14T15:45:54+00:00"
+  # Transaction
+  "/marketplaces/{marketplace_id}/transactions":
+    post:
+      operationId: createTransaction
+      tags:
+        - Transactions
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      requestBody:
+        description: Informações para criar uma transação
+        content:
+          application/json:
+            schema:
+             $ref: "#/components/schemas/TransactionDefinition"
+            example:
+              amount: 990
+              currency: "BRL"
+              description: null
+              payment_type: "credit"
+              on_behalf_of: "196e9031-ff89-485a-a6ab-efc728a77d76"
+              card:
+                id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
+              capture: true
+              statement_descriptor: null
+      responses:
+        200:
+          description: Registro de uma transação realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionDefinition"
+              example:
+                id: dfd760fe-5bc7-4e01-a8fe-6432780abf17
+                resource: transaction
+                on_behalf_of: '08dbd20e-8171-4006-bc22-7d250ae4d250'
+                customer: 685d659f-a424-4960-9f2c-d66550d9c6fb
+                status: succeeded
+                amount: 990
+                original_amount: 990
+                currency: BRL
+                description: null
+                statement_descriptor: null
+                payment_type: credit
+                payment_method:
+                  id: 6bb65625-4bcf-48d2-b04d-3b1dacca635e
+                  resource: card
+                  customer: 685d659f-a424-4960-9f2c-d66550d9c6fb
+                  description:
+                  first4_digits: '1234'
+                  last4_digits: '5678'
+                  card_brand: MasterCard
+                  expiration_month: '1'
+                  expiration_year: '23'
+                  holder_name: John Doe
+                  created_at: '2022-02-17T15:14:57+00:00'
+                  updated_at: 2022-02-17-T15:14:57+00:00
+                transaction_number: Z133937-000260004
+                gateway_authorizer: cielo
+                sales_receipt: 6d25be1bfb5d4b61abc90c155946482a
+                installment_plan: 1
+                refunded: false
+                voided: false
+                captured: true
+                fees: '0.08'
+                expected_on: '2022-03-21T03:00:00+00:00'
+                voided_at:
+                history:
+                  - id: 6491cfe363e54e6e8f5fa56b19f56c34
+                    amount: '2.00'
+                    status: succeeded
+                    authorizer:
+                    created_at: '2022-02-17 17:19:19'
+                    transaction: dfd760fe-5bc7-4e01-a8fe-6432780abf17
+                    authorizer_id:
+                    response_code:
+                    operation_type: created
+                    response_message:
+                    authorization_nsu:
+                    authorization_code:
+                    gatewayResponseTime:
+                  - id: 6db92625978843fa94c610f0b41ddf3f
+                    amount: '2.00'
+                    status: succeeded
+                    authorizer: cielo
+                    created_at: '2022-02-17 17:19:20'
+                    transaction: dfd760fe-5bc7-4e01-a8fe-6432780abf17
+                    authorizer_id: '000260004'
+                    response_code: '00'
+                    operation_type: authorization
+                    response_message: ''
+                    authorization_nsu: '20180510122911535'
+                    authorization_code: '133937'
+                    gatewayResponseTime: '3'
+                metadata:
+                created_at: '2022-02-17T17:19:22+00:00'
+                updated_at: '2022-02-17T17:19:23+00:00'
