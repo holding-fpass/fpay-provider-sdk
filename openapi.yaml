@@ -2598,20 +2598,6 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
-
-        - in: query
-          name: limit
-          schema:
-            type: number
-          required: false
-          description: O número de itens a serem coletados no conjunto de resultados
-
-        - in: query
-          name: offset
-          schema:
-            type: number
-          required: false
-          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       requestBody:
         description: Informações para associar um cartão de crédito a um comprador
         content:
@@ -2797,20 +2783,6 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
-
-        - in: query
-          name: limit
-          schema:
-            type: number
-          required: false
-          description: O número de itens a serem coletados no conjunto de resultados
-
-        - in: query
-          name: offset
-          schema:
-            type: number
-          required: false
-          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       requestBody:
         description: Informações para criar uma transação
         content:
