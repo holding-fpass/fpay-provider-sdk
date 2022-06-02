@@ -2222,13 +2222,11 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
-         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        associateCardWithCustomer: async (marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        associateCardWithCustomer: async (marketplaceId: string, inlineObject?: InlineObject, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('associateCardWithCustomer', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/cards`
@@ -2247,14 +2245,6 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-            if (offset !== undefined) {
-                localVarQueryParameter['offset'] = offset;
-            }
 
 
     
@@ -2406,14 +2396,12 @@ export const CardsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
-         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async associateCardWithCustomer(marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardDefinition>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options);
+        async associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.associateCardWithCustomer(marketplaceId, inlineObject, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2462,14 +2450,12 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
-         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        associateCardWithCustomer(marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options?: any): AxiosPromise<CardDefinition> {
-            return localVarFp.associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options).then((request) => request(axios, basePath));
+        associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject, options?: any): AxiosPromise<CardDefinition> {
+            return localVarFp.associateCardWithCustomer(marketplaceId, inlineObject, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2514,15 +2500,13 @@ export class CardsApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {InlineObject} [inlineObject] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    public associateCardWithCustomer(marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options?: AxiosRequestConfig) {
-        return CardsApiFp(this.configuration).associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options).then((request) => request(this.axios, this.basePath));
+    public associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject, options?: AxiosRequestConfig) {
+        return CardsApiFp(this.configuration).associateCardWithCustomer(marketplaceId, inlineObject, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4140,13 +4124,11 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
-         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTransaction: async (marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createTransaction: async (marketplaceId: string, transactionDefinition?: TransactionDefinition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('createTransaction', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/transactions`
@@ -4165,14 +4147,6 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-            if (offset !== undefined) {
-                localVarQueryParameter['offset'] = offset;
-            }
 
 
     
@@ -4201,14 +4175,12 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
-         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTransaction(marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionDefinition>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTransaction(marketplaceId, limit, offset, transactionDefinition, options);
+        async createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTransaction(marketplaceId, transactionDefinition, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4224,14 +4196,12 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
-         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTransaction(marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options?: any): AxiosPromise<TransactionDefinition> {
-            return localVarFp.createTransaction(marketplaceId, limit, offset, transactionDefinition, options).then((request) => request(axios, basePath));
+        createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: any): AxiosPromise<TransactionDefinition> {
+            return localVarFp.createTransaction(marketplaceId, transactionDefinition, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4246,15 +4216,13 @@ export class TransactionsApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public createTransaction(marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).createTransaction(marketplaceId, limit, offset, transactionDefinition, options).then((request) => request(this.axios, this.basePath));
+    public createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig) {
+        return TransactionsApiFp(this.configuration).createTransaction(marketplaceId, transactionDefinition, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

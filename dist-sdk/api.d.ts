@@ -1710,13 +1710,11 @@ export declare const CardsApiAxiosParamCreator: (configuration?: Configuration |
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {InlineObject} [inlineObject]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    associateCardWithCustomer: (marketplaceId: string, limit?: number | undefined, offset?: number | undefined, inlineObject?: InlineObject | undefined, options?: AxiosRequestConfig) => Promise<RequestArgs>;
+    associateCardWithCustomer: (marketplaceId: string, inlineObject?: InlineObject | undefined, options?: AxiosRequestConfig) => Promise<RequestArgs>;
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
@@ -1750,13 +1748,11 @@ export declare const CardsApiFp: (configuration?: Configuration | undefined) => 
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {InlineObject} [inlineObject]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    associateCardWithCustomer(marketplaceId: string, limit?: number | undefined, offset?: number | undefined, inlineObject?: InlineObject | undefined, options?: AxiosRequestConfig<any> | undefined): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<CardDefinition>>;
+    associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject | undefined, options?: AxiosRequestConfig<any> | undefined): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<CardDefinition>>;
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
@@ -1790,13 +1786,11 @@ export declare const CardsApiFactory: (configuration?: Configuration | undefined
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {InlineObject} [inlineObject]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    associateCardWithCustomer(marketplaceId: string, limit?: number | undefined, offset?: number | undefined, inlineObject?: InlineObject | undefined, options?: any): AxiosPromise<CardDefinition>;
+    associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject | undefined, options?: any): AxiosPromise<CardDefinition>;
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
@@ -1832,14 +1826,12 @@ export declare class CardsApi extends BaseAPI {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {InlineObject} [inlineObject]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    associateCardWithCustomer(marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options?: AxiosRequestConfig): Promise<import("axios").AxiosResponse<CardDefinition, any>>;
+    associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject, options?: AxiosRequestConfig): Promise<import("axios").AxiosResponse<CardDefinition, any>>;
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
@@ -2605,13 +2597,11 @@ export declare const TransactionsApiAxiosParamCreator: (configuration?: Configur
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createTransaction: (marketplaceId: string, limit?: number | undefined, offset?: number | undefined, transactionDefinition?: TransactionDefinition | undefined, options?: AxiosRequestConfig) => Promise<RequestArgs>;
+    createTransaction: (marketplaceId: string, transactionDefinition?: TransactionDefinition | undefined, options?: AxiosRequestConfig) => Promise<RequestArgs>;
 };
 /**
  * TransactionsApi - functional programming interface
@@ -2621,13 +2611,11 @@ export declare const TransactionsApiFp: (configuration?: Configuration | undefin
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createTransaction(marketplaceId: string, limit?: number | undefined, offset?: number | undefined, transactionDefinition?: TransactionDefinition | undefined, options?: AxiosRequestConfig<any> | undefined): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<TransactionDefinition>>;
+    createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition | undefined, options?: AxiosRequestConfig<any> | undefined): Promise<(axios?: AxiosInstance | undefined, basePath?: string | undefined) => AxiosPromise<TransactionDefinition>>;
 };
 /**
  * TransactionsApi - factory interface
@@ -2637,13 +2625,11 @@ export declare const TransactionsApiFactory: (configuration?: Configuration | un
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createTransaction(marketplaceId: string, limit?: number | undefined, offset?: number | undefined, transactionDefinition?: TransactionDefinition | undefined, options?: any): AxiosPromise<TransactionDefinition>;
+    createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition | undefined, options?: any): AxiosPromise<TransactionDefinition>;
 };
 /**
  * TransactionsApi - object-oriented interface
@@ -2655,14 +2641,12 @@ export declare class TransactionsApi extends BaseAPI {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
-     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
-     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    createTransaction(marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig): Promise<import("axios").AxiosResponse<TransactionDefinition, any>>;
+    createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig): Promise<import("axios").AxiosResponse<TransactionDefinition, any>>;
 }
 /**
  * WebhooksApi - axios parameter creator
