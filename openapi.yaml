@@ -668,6 +668,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       responses:
         200:
           description: Busca por todos os compradores realizada com sucesso
@@ -942,6 +956,55 @@ paths:
               example:
                 message: Buyer has been deleted
   # Buyers
+  "/marketplaces/{marketplace_id}/buyers/search":
+    get:
+      operationId: searchBuyer
+      tags:
+        - Buyers
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: query
+          name: document_number
+          schema:
+            type: string
+          required: false
+          description: Número do documento do comprador
+      responses:
+        200:
+          description: Busca de um comprador realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BuyerDefinition"
+              example:
+                id: "cb704242-fa70-4ed3-99c6-9a3cb64473fd"
+                resource: "buyer"
+                name: "John Doe 2"
+                document_number: "12345678900"
+                email: "email@example.com"
+                email_secondary: "email2@example.com"
+                phone_number: "00123456789"
+                birthdate: "1999-01-01T00:00:00+00:00"
+                obs: "A description here"
+                street: "St example"
+                house_number: "123"
+                postal_code: "12345123"
+                neighborhood: "Jardim Example"
+                city: "São Paulo"
+                state_initials: "SP"
+                state: "São Paulo"
+                country_code: "BR"
+                created_at: "2024-09-29T14:42:36+00:00"
+                updated_at: "2024-09-29T14:42:36+00:00"
+  # Buyers
   "/marketplaces/{marketplace_id}/buyers/{buyer_id}/cards":
     get:
       operationId: getCards
@@ -1207,6 +1270,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       responses:
         200:
           description: Busca por todos os planos realizada com sucesso
@@ -1463,6 +1540,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       responses:
         200:
           description: Busca por todas as assinaturas realizada com sucesso
@@ -1904,6 +1995,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       responses:
         200:
           description: Busca por todas as faturas realizada com sucesso
@@ -2272,6 +2377,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       responses:
         200:
           description: Busca por todos os webhooks realizada com sucesso
@@ -2479,6 +2598,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       requestBody:
         description: Informações para associar um cartão de crédito a um comprador
         content:
@@ -2664,6 +2797,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       requestBody:
         description: Informações para criar uma transação
         content:

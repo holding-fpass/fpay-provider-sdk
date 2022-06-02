@@ -292,13 +292,13 @@ export interface CardDefinition {
      * @type {string}
      * @memberof CardDefinition
      */
-    'first4digits'?: string;
+    'first4_digits'?: string;
     /**
      *
      * @type {string}
      * @memberof CardDefinition
      */
-    'last4digits'?: string;
+    'last4_digits'?: string;
     /**
      *
      * @type {string}
