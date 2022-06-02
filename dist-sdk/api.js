@@ -368,10 +368,12 @@ exports.BuyersApiAxiosParamCreator = function (configuration) {
         /**
          *
          * @param {string} marketaplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBuyers: function (marketaplaceId, options) {
+        getBuyers: function (marketaplaceId, limit, offset, options) {
             if (options === void 0) { options = {}; }
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
@@ -390,6 +392,51 @@ exports.BuyersApiAxiosParamCreator = function (configuration) {
                     // authentication BasicAuth required
                     // http basic authentication required
                     common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (limit !== undefined) {
+                        localVarQueryParameter['limit'] = limit;
+                    }
+                    if (offset !== undefined) {
+                        localVarQueryParameter['offset'] = offset;
+                    }
+                    common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
+                    headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+                    localVarRequestOptions.headers = __assign(__assign(__assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
+                    return [2 /*return*/, {
+                            url: common_1.toPathString(localVarUrlObj),
+                            options: localVarRequestOptions,
+                        }];
+                });
+            });
+        },
+        /**
+         *
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {string} [documentNumber] Número do documento do comprador
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchBuyer: function (marketplaceId, documentNumber, options) {
+            if (options === void 0) { options = {}; }
+            return __awaiter(_this, void 0, void 0, function () {
+                var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
+                return __generator(this, function (_a) {
+                    // verify required parameter 'marketplaceId' is not null or undefined
+                    common_1.assertParamExists('searchBuyer', 'marketplaceId', marketplaceId);
+                    localVarPath = "/marketplaces/{marketplace_id}/buyers/search"
+                        .replace("{" + "marketplace_id" + "}", encodeURIComponent(String(marketplaceId)));
+                    localVarUrlObj = new URL(localVarPath, common_1.DUMMY_BASE_URL);
+                    if (configuration) {
+                        baseOptions = configuration.baseOptions;
+                    }
+                    localVarRequestOptions = __assign(__assign({ method: 'GET' }, baseOptions), options);
+                    localVarHeaderParameter = {};
+                    localVarQueryParameter = {};
+                    // authentication BasicAuth required
+                    // http basic authentication required
+                    common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (documentNumber !== undefined) {
+                        localVarQueryParameter['document_number'] = documentNumber;
+                    }
                     common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
                     headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
                     localVarRequestOptions.headers = __assign(__assign(__assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
@@ -514,15 +561,37 @@ exports.BuyersApiFp = function (configuration) {
         /**
          *
          * @param {string} marketaplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBuyers: function (marketaplaceId, options) {
+        getBuyers: function (marketaplaceId, limit, offset, options) {
             return __awaiter(this, void 0, void 0, function () {
                 var localVarAxiosArgs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getBuyers(marketaplaceId, options)];
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getBuyers(marketaplaceId, limit, offset, options)];
+                        case 1:
+                            localVarAxiosArgs = _a.sent();
+                            return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
+                    }
+                });
+            });
+        },
+        /**
+         *
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {string} [documentNumber] Número do documento do comprador
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchBuyer: function (marketplaceId, documentNumber, options) {
+            return __awaiter(this, void 0, void 0, function () {
+                var localVarAxiosArgs;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.searchBuyer(marketplaceId, documentNumber, options)];
                         case 1:
                             localVarAxiosArgs = _a.sent();
                             return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
@@ -593,11 +662,23 @@ exports.BuyersApiFactory = function (configuration, basePath, axios) {
         /**
          *
          * @param {string} marketaplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBuyers: function (marketaplaceId, options) {
-            return localVarFp.getBuyers(marketaplaceId, options).then(function (request) { return request(axios, basePath); });
+        getBuyers: function (marketaplaceId, limit, offset, options) {
+            return localVarFp.getBuyers(marketaplaceId, limit, offset, options).then(function (request) { return request(axios, basePath); });
+        },
+        /**
+         *
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {string} [documentNumber] Número do documento do comprador
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchBuyer: function (marketplaceId, documentNumber, options) {
+            return localVarFp.searchBuyer(marketplaceId, documentNumber, options).then(function (request) { return request(axios, basePath); });
         },
         /**
          *
@@ -662,13 +743,27 @@ var BuyersApi = /** @class */ (function (_super) {
     /**
      *
      * @param {string} marketaplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BuyersApi
      */
-    BuyersApi.prototype.getBuyers = function (marketaplaceId, options) {
+    BuyersApi.prototype.getBuyers = function (marketaplaceId, limit, offset, options) {
         var _this = this;
-        return exports.BuyersApiFp(this.configuration).getBuyers(marketaplaceId, options).then(function (request) { return request(_this.axios, _this.basePath); });
+        return exports.BuyersApiFp(this.configuration).getBuyers(marketaplaceId, limit, offset, options).then(function (request) { return request(_this.axios, _this.basePath); });
+    };
+    /**
+     *
+     * @param {string} marketplaceId Identificador do marketplace
+     * @param {string} [documentNumber] Número do documento do comprador
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BuyersApi
+     */
+    BuyersApi.prototype.searchBuyer = function (marketplaceId, documentNumber, options) {
+        var _this = this;
+        return exports.BuyersApiFp(this.configuration).searchBuyer(marketplaceId, documentNumber, options).then(function (request) { return request(_this.axios, _this.basePath); });
     };
     /**
      *
@@ -1109,11 +1204,13 @@ exports.CardsApiAxiosParamCreator = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        associateCardWithCustomer: function (marketplaceId, inlineObject, options) {
+        associateCardWithCustomer: function (marketplaceId, limit, offset, inlineObject, options) {
             if (options === void 0) { options = {}; }
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
@@ -1132,6 +1229,12 @@ exports.CardsApiAxiosParamCreator = function (configuration) {
                     // authentication BasicAuth required
                     // http basic authentication required
                     common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (limit !== undefined) {
+                        localVarQueryParameter['limit'] = limit;
+                    }
+                    if (offset !== undefined) {
+                        localVarQueryParameter['offset'] = offset;
+                    }
                     localVarHeaderParameter['Content-Type'] = 'application/json';
                     common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
                     headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1272,16 +1375,18 @@ exports.CardsApiFp = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        associateCardWithCustomer: function (marketplaceId, inlineObject, options) {
+        associateCardWithCustomer: function (marketplaceId, limit, offset, inlineObject, options) {
             return __awaiter(this, void 0, void 0, function () {
                 var localVarAxiosArgs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.associateCardWithCustomer(marketplaceId, inlineObject, options)];
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options)];
                         case 1:
                             localVarAxiosArgs = _a.sent();
                             return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
@@ -1361,12 +1466,14 @@ exports.CardsApiFactory = function (configuration, basePath, axios) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject]
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        associateCardWithCustomer: function (marketplaceId, inlineObject, options) {
-            return localVarFp.associateCardWithCustomer(marketplaceId, inlineObject, options).then(function (request) { return request(axios, basePath); });
+        associateCardWithCustomer: function (marketplaceId, limit, offset, inlineObject, options) {
+            return localVarFp.associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options).then(function (request) { return request(axios, basePath); });
         },
         /**
          *
@@ -1414,14 +1521,16 @@ var CardsApi = /** @class */ (function (_super) {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {InlineObject} [inlineObject]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    CardsApi.prototype.associateCardWithCustomer = function (marketplaceId, inlineObject, options) {
+    CardsApi.prototype.associateCardWithCustomer = function (marketplaceId, limit, offset, inlineObject, options) {
         var _this = this;
-        return exports.CardsApiFp(this.configuration).associateCardWithCustomer(marketplaceId, inlineObject, options).then(function (request) { return request(_this.axios, _this.basePath); });
+        return exports.CardsApiFp(this.configuration).associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options).then(function (request) { return request(_this.axios, _this.basePath); });
     };
     /**
      *
@@ -1627,10 +1736,12 @@ exports.InvoicesApiAxiosParamCreator = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInvoices: function (marketplaceId, options) {
+        getInvoices: function (marketplaceId, limit, offset, options) {
             if (options === void 0) { options = {}; }
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
@@ -1649,6 +1760,12 @@ exports.InvoicesApiAxiosParamCreator = function (configuration) {
                     // authentication BasicAuth required
                     // http basic authentication required
                     common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (limit !== undefined) {
+                        localVarQueryParameter['limit'] = limit;
+                    }
+                    if (offset !== undefined) {
+                        localVarQueryParameter['offset'] = offset;
+                    }
                     common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
                     headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
                     localVarRequestOptions.headers = __assign(__assign(__assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
@@ -1832,15 +1949,17 @@ exports.InvoicesApiFp = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInvoices: function (marketplaceId, options) {
+        getInvoices: function (marketplaceId, limit, offset, options) {
             return __awaiter(this, void 0, void 0, function () {
                 var localVarAxiosArgs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getInvoices(marketplaceId, options)];
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getInvoices(marketplaceId, limit, offset, options)];
                         case 1:
                             localVarAxiosArgs = _a.sent();
                             return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
@@ -1941,11 +2060,13 @@ exports.InvoicesApiFactory = function (configuration, basePath, axios) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInvoices: function (marketplaceId, options) {
-            return localVarFp.getInvoices(marketplaceId, options).then(function (request) { return request(axios, basePath); });
+        getInvoices: function (marketplaceId, limit, offset, options) {
+            return localVarFp.getInvoices(marketplaceId, limit, offset, options).then(function (request) { return request(axios, basePath); });
         },
         /**
          *
@@ -2032,13 +2153,15 @@ var InvoicesApi = /** @class */ (function (_super) {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InvoicesApi
      */
-    InvoicesApi.prototype.getInvoices = function (marketplaceId, options) {
+    InvoicesApi.prototype.getInvoices = function (marketplaceId, limit, offset, options) {
         var _this = this;
-        return exports.InvoicesApiFp(this.configuration).getInvoices(marketplaceId, options).then(function (request) { return request(_this.axios, _this.basePath); });
+        return exports.InvoicesApiFp(this.configuration).getInvoices(marketplaceId, limit, offset, options).then(function (request) { return request(_this.axios, _this.basePath); });
     };
     /**
      *
@@ -2194,10 +2317,12 @@ exports.PlansApiAxiosParamCreator = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlans: function (marketplaceId, options) {
+        getPlans: function (marketplaceId, limit, offset, options) {
             if (options === void 0) { options = {}; }
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
@@ -2216,6 +2341,12 @@ exports.PlansApiAxiosParamCreator = function (configuration) {
                     // authentication BasicAuth required
                     // http basic authentication required
                     common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (limit !== undefined) {
+                        localVarQueryParameter['limit'] = limit;
+                    }
+                    if (offset !== undefined) {
+                        localVarQueryParameter['offset'] = offset;
+                    }
                     common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
                     headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
                     localVarRequestOptions.headers = __assign(__assign(__assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
@@ -2340,15 +2471,17 @@ exports.PlansApiFp = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlans: function (marketplaceId, options) {
+        getPlans: function (marketplaceId, limit, offset, options) {
             return __awaiter(this, void 0, void 0, function () {
                 var localVarAxiosArgs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getPlans(marketplaceId, options)];
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getPlans(marketplaceId, limit, offset, options)];
                         case 1:
                             localVarAxiosArgs = _a.sent();
                             return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
@@ -2419,11 +2552,13 @@ exports.PlansApiFactory = function (configuration, basePath, axios) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlans: function (marketplaceId, options) {
-            return localVarFp.getPlans(marketplaceId, options).then(function (request) { return request(axios, basePath); });
+        getPlans: function (marketplaceId, limit, offset, options) {
+            return localVarFp.getPlans(marketplaceId, limit, offset, options).then(function (request) { return request(axios, basePath); });
         },
         /**
          *
@@ -2488,13 +2623,15 @@ var PlansApi = /** @class */ (function (_super) {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlansApi
      */
-    PlansApi.prototype.getPlans = function (marketplaceId, options) {
+    PlansApi.prototype.getPlans = function (marketplaceId, limit, offset, options) {
         var _this = this;
-        return exports.PlansApiFp(this.configuration).getPlans(marketplaceId, options).then(function (request) { return request(_this.axios, _this.basePath); });
+        return exports.PlansApiFp(this.configuration).getPlans(marketplaceId, limit, offset, options).then(function (request) { return request(_this.axios, _this.basePath); });
     };
     /**
      *
@@ -2638,10 +2775,12 @@ exports.SubscriptionsApiAxiosParamCreator = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubscriptions: function (marketplaceId, options) {
+        getSubscriptions: function (marketplaceId, limit, offset, options) {
             if (options === void 0) { options = {}; }
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
@@ -2660,6 +2799,12 @@ exports.SubscriptionsApiAxiosParamCreator = function (configuration) {
                     // authentication BasicAuth required
                     // http basic authentication required
                     common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (limit !== undefined) {
+                        localVarQueryParameter['limit'] = limit;
+                    }
+                    if (offset !== undefined) {
+                        localVarQueryParameter['offset'] = offset;
+                    }
                     common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
                     headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
                     localVarRequestOptions.headers = __assign(__assign(__assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
@@ -2862,15 +3007,17 @@ exports.SubscriptionsApiFp = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubscriptions: function (marketplaceId, options) {
+        getSubscriptions: function (marketplaceId, limit, offset, options) {
             return __awaiter(this, void 0, void 0, function () {
                 var localVarAxiosArgs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getSubscriptions(marketplaceId, options)];
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getSubscriptions(marketplaceId, limit, offset, options)];
                         case 1:
                             localVarAxiosArgs = _a.sent();
                             return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
@@ -2981,11 +3128,13 @@ exports.SubscriptionsApiFactory = function (configuration, basePath, axios) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubscriptions: function (marketplaceId, options) {
-            return localVarFp.getSubscriptions(marketplaceId, options).then(function (request) { return request(axios, basePath); });
+        getSubscriptions: function (marketplaceId, limit, offset, options) {
+            return localVarFp.getSubscriptions(marketplaceId, limit, offset, options).then(function (request) { return request(axios, basePath); });
         },
         /**
          *
@@ -3070,13 +3219,15 @@ var SubscriptionsApi = /** @class */ (function (_super) {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SubscriptionsApi
      */
-    SubscriptionsApi.prototype.getSubscriptions = function (marketplaceId, options) {
+    SubscriptionsApi.prototype.getSubscriptions = function (marketplaceId, limit, offset, options) {
         var _this = this;
-        return exports.SubscriptionsApiFp(this.configuration).getSubscriptions(marketplaceId, options).then(function (request) { return request(_this.axios, _this.basePath); });
+        return exports.SubscriptionsApiFp(this.configuration).getSubscriptions(marketplaceId, limit, offset, options).then(function (request) { return request(_this.axios, _this.basePath); });
     };
     /**
      *
@@ -3128,11 +3279,13 @@ exports.TransactionsApiAxiosParamCreator = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTransaction: function (marketplaceId, transactionDefinition, options) {
+        createTransaction: function (marketplaceId, limit, offset, transactionDefinition, options) {
             if (options === void 0) { options = {}; }
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
@@ -3151,6 +3304,12 @@ exports.TransactionsApiAxiosParamCreator = function (configuration) {
                     // authentication BasicAuth required
                     // http basic authentication required
                     common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (limit !== undefined) {
+                        localVarQueryParameter['limit'] = limit;
+                    }
+                    if (offset !== undefined) {
+                        localVarQueryParameter['offset'] = offset;
+                    }
                     localVarHeaderParameter['Content-Type'] = 'application/json';
                     common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
                     headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3175,16 +3334,18 @@ exports.TransactionsApiFp = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTransaction: function (marketplaceId, transactionDefinition, options) {
+        createTransaction: function (marketplaceId, limit, offset, transactionDefinition, options) {
             return __awaiter(this, void 0, void 0, function () {
                 var localVarAxiosArgs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.createTransaction(marketplaceId, transactionDefinition, options)];
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.createTransaction(marketplaceId, limit, offset, transactionDefinition, options)];
                         case 1:
                             localVarAxiosArgs = _a.sent();
                             return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
@@ -3204,12 +3365,14 @@ exports.TransactionsApiFactory = function (configuration, basePath, axios) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTransaction: function (marketplaceId, transactionDefinition, options) {
-            return localVarFp.createTransaction(marketplaceId, transactionDefinition, options).then(function (request) { return request(axios, basePath); });
+        createTransaction: function (marketplaceId, limit, offset, transactionDefinition, options) {
+            return localVarFp.createTransaction(marketplaceId, limit, offset, transactionDefinition, options).then(function (request) { return request(axios, basePath); });
         },
     };
 };
@@ -3227,14 +3390,16 @@ var TransactionsApi = /** @class */ (function (_super) {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    TransactionsApi.prototype.createTransaction = function (marketplaceId, transactionDefinition, options) {
+    TransactionsApi.prototype.createTransaction = function (marketplaceId, limit, offset, transactionDefinition, options) {
         var _this = this;
-        return exports.TransactionsApiFp(this.configuration).createTransaction(marketplaceId, transactionDefinition, options).then(function (request) { return request(_this.axios, _this.basePath); });
+        return exports.TransactionsApiFp(this.configuration).createTransaction(marketplaceId, limit, offset, transactionDefinition, options).then(function (request) { return request(_this.axios, _this.basePath); });
     };
     return TransactionsApi;
 }(base_1.BaseAPI));
@@ -3365,10 +3530,12 @@ exports.WebhooksApiAxiosParamCreator = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhooks: function (marketplaceId, options) {
+        getWebhooks: function (marketplaceId, limit, offset, options) {
             if (options === void 0) { options = {}; }
             return __awaiter(_this, void 0, void 0, function () {
                 var localVarPath, localVarUrlObj, baseOptions, localVarRequestOptions, localVarHeaderParameter, localVarQueryParameter, headersFromBaseOptions;
@@ -3387,6 +3554,12 @@ exports.WebhooksApiAxiosParamCreator = function (configuration) {
                     // authentication BasicAuth required
                     // http basic authentication required
                     common_1.setBasicAuthToObject(localVarRequestOptions, configuration);
+                    if (limit !== undefined) {
+                        localVarQueryParameter['limit'] = limit;
+                    }
+                    if (offset !== undefined) {
+                        localVarQueryParameter['offset'] = offset;
+                    }
                     common_1.setSearchParams(localVarUrlObj, localVarQueryParameter);
                     headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
                     localVarRequestOptions.headers = __assign(__assign(__assign({}, localVarHeaderParameter), headersFromBaseOptions), options.headers);
@@ -3511,15 +3684,17 @@ exports.WebhooksApiFp = function (configuration) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhooks: function (marketplaceId, options) {
+        getWebhooks: function (marketplaceId, limit, offset, options) {
             return __awaiter(this, void 0, void 0, function () {
                 var localVarAxiosArgs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getWebhooks(marketplaceId, options)];
+                        case 0: return [4 /*yield*/, localVarAxiosParamCreator.getWebhooks(marketplaceId, limit, offset, options)];
                         case 1:
                             localVarAxiosArgs = _a.sent();
                             return [2 /*return*/, common_1.createRequestFunction(localVarAxiosArgs, axios_1.default, base_1.BASE_PATH, configuration)];
@@ -3590,11 +3765,13 @@ exports.WebhooksApiFactory = function (configuration, basePath, axios) {
         /**
          *
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhooks: function (marketplaceId, options) {
-            return localVarFp.getWebhooks(marketplaceId, options).then(function (request) { return request(axios, basePath); });
+        getWebhooks: function (marketplaceId, limit, offset, options) {
+            return localVarFp.getWebhooks(marketplaceId, limit, offset, options).then(function (request) { return request(axios, basePath); });
         },
         /**
          *
@@ -3659,13 +3836,15 @@ var WebhooksApi = /** @class */ (function (_super) {
     /**
      *
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebhooksApi
      */
-    WebhooksApi.prototype.getWebhooks = function (marketplaceId, options) {
+    WebhooksApi.prototype.getWebhooks = function (marketplaceId, limit, offset, options) {
         var _this = this;
-        return exports.WebhooksApiFp(this.configuration).getWebhooks(marketplaceId, options).then(function (request) { return request(_this.axios, _this.basePath); });
+        return exports.WebhooksApiFp(this.configuration).getWebhooks(marketplaceId, limit, offset, options).then(function (request) { return request(_this.axios, _this.basePath); });
     };
     /**
      *

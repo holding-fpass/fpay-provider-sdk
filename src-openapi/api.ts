@@ -1467,10 +1467,12 @@ export const BuyersApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @param {string} marketaplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBuyers: async (marketaplaceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getBuyers: async (marketaplaceId: string, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketaplaceId' is not null or undefined
             assertParamExists('getBuyers', 'marketaplaceId', marketaplaceId)
             const localVarPath = `/marketplaces/{marketaplace_id}/buyers`
@@ -1489,6 +1491,56 @@ export const BuyersApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {string} [documentNumber] Número do documento do comprador
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchBuyer: async (marketplaceId: string, documentNumber?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'marketplaceId' is not null or undefined
+            assertParamExists('searchBuyer', 'marketplaceId', marketplaceId)
+            const localVarPath = `/marketplaces/{marketplace_id}/buyers/search`
+                .replace(`{${"marketplace_id"}}`, encodeURIComponent(String(marketplaceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication BasicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (documentNumber !== undefined) {
+                localVarQueryParameter['document_number'] = documentNumber;
+            }
 
 
     
@@ -1592,11 +1644,24 @@ export const BuyersApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketaplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBuyers(marketaplaceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getBuyers(marketaplaceId, options);
+        async getBuyers(marketaplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBuyers(marketaplaceId, limit, offset, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {string} [documentNumber] Número do documento do comprador
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchBuyer(marketplaceId: string, documentNumber?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BuyerDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchBuyer(marketplaceId, documentNumber, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1654,11 +1719,23 @@ export const BuyersApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @param {string} marketaplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBuyers(marketaplaceId: string, options?: any): AxiosPromise<ListDefinition & object> {
-            return localVarFp.getBuyers(marketaplaceId, options).then((request) => request(axios, basePath));
+        getBuyers(marketaplaceId: string, limit?: number, offset?: number, options?: any): AxiosPromise<ListDefinition & object> {
+            return localVarFp.getBuyers(marketaplaceId, limit, offset, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} marketplaceId Identificador do marketplace
+         * @param {string} [documentNumber] Número do documento do comprador
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchBuyer(marketplaceId: string, documentNumber?: string, options?: any): AxiosPromise<BuyerDefinition> {
+            return localVarFp.searchBuyer(marketplaceId, documentNumber, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1720,12 +1797,26 @@ export class BuyersApi extends BaseAPI {
     /**
      * 
      * @param {string} marketaplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BuyersApi
      */
-    public getBuyers(marketaplaceId: string, options?: AxiosRequestConfig) {
-        return BuyersApiFp(this.configuration).getBuyers(marketaplaceId, options).then((request) => request(this.axios, this.basePath));
+    public getBuyers(marketaplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig) {
+        return BuyersApiFp(this.configuration).getBuyers(marketaplaceId, limit, offset, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} marketplaceId Identificador do marketplace
+     * @param {string} [documentNumber] Número do documento do comprador
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BuyersApi
+     */
+    public searchBuyer(marketplaceId: string, documentNumber?: string, options?: AxiosRequestConfig) {
+        return BuyersApiFp(this.configuration).searchBuyer(marketplaceId, documentNumber, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2131,11 +2222,13 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        associateCardWithCustomer: async (marketplaceId: string, inlineObject?: InlineObject, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        associateCardWithCustomer: async (marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('associateCardWithCustomer', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/cards`
@@ -2154,6 +2247,14 @@ export const CardsApiAxiosParamCreator = function (configuration?: Configuration
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
 
     
@@ -2305,12 +2406,14 @@ export const CardsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardDefinition>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.associateCardWithCustomer(marketplaceId, inlineObject, options);
+        async associateCardWithCustomer(marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2359,12 +2462,14 @@ export const CardsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {InlineObject} [inlineObject] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject, options?: any): AxiosPromise<CardDefinition> {
-            return localVarFp.associateCardWithCustomer(marketplaceId, inlineObject, options).then((request) => request(axios, basePath));
+        associateCardWithCustomer(marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options?: any): AxiosPromise<CardDefinition> {
+            return localVarFp.associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2409,13 +2514,15 @@ export class CardsApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {InlineObject} [inlineObject] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CardsApi
      */
-    public associateCardWithCustomer(marketplaceId: string, inlineObject?: InlineObject, options?: AxiosRequestConfig) {
-        return CardsApiFp(this.configuration).associateCardWithCustomer(marketplaceId, inlineObject, options).then((request) => request(this.axios, this.basePath));
+    public associateCardWithCustomer(marketplaceId: string, limit?: number, offset?: number, inlineObject?: InlineObject, options?: AxiosRequestConfig) {
+        return CardsApiFp(this.configuration).associateCardWithCustomer(marketplaceId, limit, offset, inlineObject, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2629,10 +2736,12 @@ export const InvoicesApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInvoices: async (marketplaceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getInvoices: async (marketplaceId: string, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('getInvoices', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/invoices`
@@ -2651,6 +2760,14 @@ export const InvoicesApiAxiosParamCreator = function (configuration?: Configurat
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
 
     
@@ -2806,11 +2923,13 @@ export const InvoicesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getInvoices(marketplaceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getInvoices(marketplaceId, options);
+        async getInvoices(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInvoices(marketplaceId, limit, offset, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2889,11 +3008,13 @@ export const InvoicesApiFactory = function (configuration?: Configuration, baseP
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getInvoices(marketplaceId: string, options?: any): AxiosPromise<ListDefinition & object> {
-            return localVarFp.getInvoices(marketplaceId, options).then((request) => request(axios, basePath));
+        getInvoices(marketplaceId: string, limit?: number, offset?: number, options?: any): AxiosPromise<ListDefinition & object> {
+            return localVarFp.getInvoices(marketplaceId, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2977,12 +3098,14 @@ export class InvoicesApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof InvoicesApi
      */
-    public getInvoices(marketplaceId: string, options?: AxiosRequestConfig) {
-        return InvoicesApiFp(this.configuration).getInvoices(marketplaceId, options).then((request) => request(this.axios, this.basePath));
+    public getInvoices(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig) {
+        return InvoicesApiFp(this.configuration).getInvoices(marketplaceId, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3144,10 +3267,12 @@ export const PlansApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlans: async (marketplaceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPlans: async (marketplaceId: string, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('getPlans', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/plans`
@@ -3166,6 +3291,14 @@ export const PlansApiAxiosParamCreator = function (configuration?: Configuration
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
 
     
@@ -3269,11 +3402,13 @@ export const PlansApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPlans(marketplaceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPlans(marketplaceId, options);
+        async getPlans(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPlans(marketplaceId, limit, offset, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3331,11 +3466,13 @@ export const PlansApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPlans(marketplaceId: string, options?: any): AxiosPromise<ListDefinition & object> {
-            return localVarFp.getPlans(marketplaceId, options).then((request) => request(axios, basePath));
+        getPlans(marketplaceId: string, limit?: number, offset?: number, options?: any): AxiosPromise<ListDefinition & object> {
+            return localVarFp.getPlans(marketplaceId, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3397,12 +3534,14 @@ export class PlansApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PlansApi
      */
-    public getPlans(marketplaceId: string, options?: AxiosRequestConfig) {
-        return PlansApiFp(this.configuration).getPlans(marketplaceId, options).then((request) => request(this.axios, this.basePath));
+    public getPlans(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig) {
+        return PlansApiFp(this.configuration).getPlans(marketplaceId, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3552,10 +3691,12 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubscriptions: async (marketplaceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getSubscriptions: async (marketplaceId: string, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('getSubscriptions', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/subscriptions`
@@ -3574,6 +3715,14 @@ export const SubscriptionsApiAxiosParamCreator = function (configuration?: Confi
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
 
     
@@ -3759,11 +3908,13 @@ export const SubscriptionsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSubscriptions(marketplaceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getSubscriptions(marketplaceId, options);
+        async getSubscriptions(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSubscriptions(marketplaceId, limit, offset, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3843,11 +3994,13 @@ export const SubscriptionsApiFactory = function (configuration?: Configuration, 
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSubscriptions(marketplaceId: string, options?: any): AxiosPromise<ListDefinition & object> {
-            return localVarFp.getSubscriptions(marketplaceId, options).then((request) => request(axios, basePath));
+        getSubscriptions(marketplaceId: string, limit?: number, offset?: number, options?: any): AxiosPromise<ListDefinition & object> {
+            return localVarFp.getSubscriptions(marketplaceId, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3929,12 +4082,14 @@ export class SubscriptionsApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SubscriptionsApi
      */
-    public getSubscriptions(marketplaceId: string, options?: AxiosRequestConfig) {
-        return SubscriptionsApiFp(this.configuration).getSubscriptions(marketplaceId, options).then((request) => request(this.axios, this.basePath));
+    public getSubscriptions(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig) {
+        return SubscriptionsApiFp(this.configuration).getSubscriptions(marketplaceId, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3985,11 +4140,13 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTransaction: async (marketplaceId: string, transactionDefinition?: TransactionDefinition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createTransaction: async (marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('createTransaction', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/transactions`
@@ -4008,6 +4165,14 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
 
     
@@ -4036,12 +4201,14 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionDefinition>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTransaction(marketplaceId, transactionDefinition, options);
+        async createTransaction(marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTransaction(marketplaceId, limit, offset, transactionDefinition, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4057,12 +4224,14 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: any): AxiosPromise<TransactionDefinition> {
-            return localVarFp.createTransaction(marketplaceId, transactionDefinition, options).then((request) => request(axios, basePath));
+        createTransaction(marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options?: any): AxiosPromise<TransactionDefinition> {
+            return localVarFp.createTransaction(marketplaceId, limit, offset, transactionDefinition, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4077,13 +4246,15 @@ export class TransactionsApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {TransactionDefinition} [transactionDefinition] Informações para criar uma transação
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionsApi
      */
-    public createTransaction(marketplaceId: string, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).createTransaction(marketplaceId, transactionDefinition, options).then((request) => request(this.axios, this.basePath));
+    public createTransaction(marketplaceId: string, limit?: number, offset?: number, transactionDefinition?: TransactionDefinition, options?: AxiosRequestConfig) {
+        return TransactionsApiFp(this.configuration).createTransaction(marketplaceId, limit, offset, transactionDefinition, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4220,10 +4391,12 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhooks: async (marketplaceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getWebhooks: async (marketplaceId: string, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'marketplaceId' is not null or undefined
             assertParamExists('getWebhooks', 'marketplaceId', marketplaceId)
             const localVarPath = `/marketplaces/{marketplace_id}/webhooks`
@@ -4242,6 +4415,14 @@ export const WebhooksApiAxiosParamCreator = function (configuration?: Configurat
             // authentication BasicAuth required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
 
 
     
@@ -4345,11 +4526,13 @@ export const WebhooksApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWebhooks(marketplaceId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getWebhooks(marketplaceId, options);
+        async getWebhooks(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDefinition & object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getWebhooks(marketplaceId, limit, offset, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -4407,11 +4590,13 @@ export const WebhooksApiFactory = function (configuration?: Configuration, baseP
         /**
          * 
          * @param {string} marketplaceId Identificador do marketplace
+         * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+         * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWebhooks(marketplaceId: string, options?: any): AxiosPromise<ListDefinition & object> {
-            return localVarFp.getWebhooks(marketplaceId, options).then((request) => request(axios, basePath));
+        getWebhooks(marketplaceId: string, limit?: number, offset?: number, options?: any): AxiosPromise<ListDefinition & object> {
+            return localVarFp.getWebhooks(marketplaceId, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4473,12 +4658,14 @@ export class WebhooksApi extends BaseAPI {
     /**
      * 
      * @param {string} marketplaceId Identificador do marketplace
+     * @param {number} [limit] O número de itens a serem coletados no conjunto de resultados
+     * @param {number} [offset] O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WebhooksApi
      */
-    public getWebhooks(marketplaceId: string, options?: AxiosRequestConfig) {
-        return WebhooksApiFp(this.configuration).getWebhooks(marketplaceId, options).then((request) => request(this.axios, this.basePath));
+    public getWebhooks(marketplaceId: string, limit?: number, offset?: number, options?: AxiosRequestConfig) {
+        return WebhooksApiFp(this.configuration).getWebhooks(marketplaceId, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
