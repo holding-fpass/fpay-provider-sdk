@@ -21,6 +21,7 @@ components:
       pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d+([+-][0-2]\d:[0-5]\d|Z)
     ListDefinition:
       type: object
+      required: ["resource", "items", "limit", "offset", "page", "total", "total_pages", "has_more"]
       properties:
         resource:
           type: string
@@ -45,6 +46,7 @@ components:
     # Buyer Definition
     BuyerDefinition:
       type: object
+      required: ["id", "name", "document_number", "email", "email_secondary", "phone_number", "birthdate", "obs", "street", "house_number", "postal_code", "neighborhood", "city", "state_initials", "state", "country_code", "created_at", "updated_at"]
       properties:
         id:
           oneOf:
@@ -101,9 +103,58 @@ components:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
             - readOnly: true
+    CreateBuyerDefinition:
+      type: object
+      required: ["name", "document_number"]
+      properties:
+        name:
+          type: string
+        document_number:
+          type: string
+        email:
+          type: string
+          nullable: true
+        email_secondary:
+          type: string
+          nullable: true
+        phone_number:
+          type: string
+          nullable: true
+        birthdate:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - nullable: true
+        obs:
+          type: string
+          nullable: true
+        street:
+          type: string
+          nullable: true
+        house_number:
+          type: string
+          nullable: true
+        postal_code:
+          type: string
+          nullable: true
+        neighborhood:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state_initials:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        country_code:
+          type: string
+          nullable: true
     # Boleto Definition
     BoletoDefinition:
       type: object
+      required: ["id", "resource", "customer", "status", "description", "expiration_date", "payment_limit_date", "paid_at", "bank_code", "recipient", "uri", "barcode", "address", "accepted", "downloaded", "metadata", "created_at", "updated_at"]
       properties:
         id:
           oneOf:
@@ -173,6 +224,7 @@ components:
     # Card Definition
     CardDefinition:
       type: object
+      required: ["id", "resource", "customer", "description", "first4_digits", "last4_digits", "card_brand", "expiration_month", "expiration_year", "holder_name", "created_at", "updated_at"]
       properties:
         id:
           type: string
@@ -210,6 +262,7 @@ components:
     # Webhook Definition
     WebhookDefinition:
       type: object
+      required: ["id", "resource", "endpoint", "description", "event", "created_at", "updated_at"]
       properties:
         id:
           oneOf:
@@ -295,9 +348,83 @@ components:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
             - readOnly: true
+    CreateWebhookDefinition:
+      type: object
+      required: ["endpoint", "event"]
+      properties:
+        endpoint:
+          type: string
+        description:
+          type: string
+          nullable: true
+        event:
+          enum:
+            - all
+            - bank_account.associated
+            - bank_account.deleted
+            - buyer.transaction.canceled
+            - buyer.transaction.charge_back
+            - buyer.transaction.disputed
+            - buyer.transaction.failed
+            - buyer.transaction.pre_authorized
+            - buyer.transaction.reversed
+            - buyer.transaction.succeeded
+            - buyer.transaction.updated
+            - buyer.card.associated
+            - document.created
+            - document.updated
+            - invoice.created
+            - invoice.canceled
+            - invoice.overdue
+            - invoice.paid
+            - invoice.refunded
+            - plan.created
+            - plan.deleted
+            - plan.updated
+            - receivable.canceled
+            - receivable.created
+            - receivable.deleted
+            - receivable.paid
+            - receivable.refunded
+            - receivable.scheduled
+            - seller.actived
+            - seller.created
+            - seller.deleted
+            - seller.denied
+            - seller.enabled
+            - seller.updated
+            - subscription.active
+            - subscription.created
+            - subscription.deleted
+            - subscription.expired
+            - subscription.suspended
+            - subscription.updated
+            - subscription.paid
+            - transaction.canceled
+            - transaction.capture.failed
+            - transaction.capture.succeeded
+            - transaction.charge_back
+            - transaction.commission.succeeded
+            - transaction.created
+            - transaction.dispute.succeeded
+            - transaction.disputed
+            - transaction.failed
+            - transaction.pre_authorization.succeeded
+            - transaction.pre_authorized
+            - transaction.reversed
+            - transaction.succeeded
+            - transaction.updated
+            - transaction.void.failed
+            - transaction.void.succeeded
+            - transfer.canceled
+            - transfer.confirmed
+            - transfer.created
+            - transfer.failed
+            - transfer.succeeded
     # Plan Definition
     PlanDefinition:
       type: object
+      required: ["id", "resource", "marketplace", "name", "frequency", "interval", "payment_methods", "amount", "setup_amount", "currency", "description", "duration", "metadata", "created_at", "updated_at"]
       properties:
         id:
           oneOf:
@@ -334,6 +461,9 @@ components:
           nullable: true
         duration:
           type: number
+        metadata:
+          type: object
+          nullable: true
         created_at:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
@@ -342,9 +472,41 @@ components:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
             - readOnly: true
+    CreatePlanDefinition:
+      type: object
+      required: [ "name", "frequency", "interval", "payment_methods", "amount", "setup_amount", "currency", "duration"]
+      properties:
+        name:
+          type: string
+        frequency:
+          enum:
+            - daily
+            - monthly
+            - weekly
+            - annually
+        interval:
+          type: number
+        payment_methods:
+          type: string
+        amount:
+          type: number
+        setup_amount:
+          type: number
+        currency:
+          enum:
+            - BRL
+        description:
+          type: string
+          nullable: true
+        duration:
+          type: number
+        metadata:
+          type: object
+          nullable: true
     # Subscription Definition
     SubscriptionDefinition:
       type: object
+      required: ["id", "resource", "plan", "customer", "card", "description", "payment_method", "due_date", "due_since_date", "expiration_date", "amount", "currency", "status", "suspended_at", "created_at", "updated_at"]
       properties:
         id:
           oneOf:
@@ -358,6 +520,9 @@ components:
           type: string
         customer:
           type: string
+        card:
+          type: string
+          nullable: true
         description:
           type: string
           nullable: true
@@ -372,8 +537,9 @@ components:
             - $ref: "#/components/schemas/DateISO"
           nullable: true
         expiration_date:
-          type: string
-          readOnly: true
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - nullable: true
         amount:
           type: number
           nullable: true
@@ -392,6 +558,9 @@ components:
             - $ref: "#/components/schemas/DateISO"
           nullable: true
           readOnly: true
+        metadata:
+          type: object
+          nullable: true
         created_at:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
@@ -400,9 +569,43 @@ components:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
           readOnly: true
+    CreateSubscriptionDefinition:
+      type: object
+      required: ["plan", "customer", "payment_method", "due_date", "currency"]
+      properties:
+        plan:
+          type: string
+        customer:
+          type: string
+        card:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        payment_method:
+          enum:
+            - credit
+        due_date:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+        expiration_date:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - nullable: true
+        amount:
+          type: number
+          nullable: true
+        currency:
+          enum:
+            - BRL
+        metadata:
+          type: object
+          nullable: true
     # Invoice Definition
     InvoiceDefinition:
       type: object
+      required: ["id", "resource", "subscription", "customer", "description", "payment_method", "due_date", "expiration_date", "amount", "currency", "paid_at", "voided_at", "retries", "max_retries", "status", "metadata", "created_at", "updated_at"]
       properties:
         id:
           oneOf:
@@ -468,9 +671,37 @@ components:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
             - readOnly: true
+    CreateInvoiceDefinition:
+      type: object
+      required: ["subscription", "customer", "payment_method", "due_date", "amount", "currency", "metadata"]
+      properties:
+        subscription:
+          type: string
+        customer:
+          type: string
+        description:
+          type: string
+          nullable: true
+        payment_method:
+          type: string
+        due_date:
+          type: string
+        expiration_date:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - nullable: true
+        amount:
+          type: number
+        currency:
+          enum:
+            - BRL
+        metadata:
+          type: object
+          nullable: true
     # Token Definition
     TokenDefinition:
       type: object
+      required: ["id", "resource", "used", "type", "card", "created_at", "updated_at"]
       properties:
         id:
           type: string
@@ -497,6 +728,7 @@ components:
     # Transaction Definition
     TransactionDefinition:
       type: object
+      required: ["id", "resource", "on_behalf_of", "customer", "status", "amount", "originalAmount", "currency", "description", "statement_descriptor", "payment_type", "payment_method", "transaction_number", "gateway_authorizer", "sales_receipt", "installment_plan", "refunded", "voided", "captured", "fees", "expected_on", "voided_at", "history", "metadata", "created_at", "updated_at"]
       properties:
         id:
           oneOf:
@@ -647,6 +879,116 @@ components:
           oneOf:
             - $ref: "#/components/schemas/DateISO"
             - readOnly: true
+    CreateTransactionDefinition:
+      type: object
+      required: ["on_behalf_of", "customer", "amount", "currency", "payment_type"]
+      properties:
+        on_behalf_of:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+        customer:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+        amount:
+          type: number
+        currency:
+          enum:
+            - BRL
+        description:
+          type: string
+          nullable: true
+        payment_type:
+          enum:
+            - credit
+            - boleto
+        number_installments:
+          type: number
+          nullable: true
+        captured:
+          type: boolean
+          readOnly: true
+        coupon:
+          type: string
+        card:
+          type: object
+          properties:
+            id:
+              oneOf:
+                - $ref: "#/components/schemas/UUID"
+        payment_method:
+          type: object
+          properties:
+            expiration_date:
+              oneOf:
+                - $ref: "#/components/schemas/DateISO"
+            payment_limit_date:
+              type: string
+            body_instructions:
+              type: array
+              items:
+                type: string
+            billing_instructions:
+              type: object
+              properties:
+                late_fee:
+                  type: object
+                  required: ["mode"]
+                  properties:
+                    mode:
+                      enum:
+                        - FIXED
+                        - PERCENTAGE
+                    amount:
+                      type: number
+                    percentage:
+                      type: number
+                interest:
+                  type: object
+                  required: ["mode"]
+                  properties:
+                    mode:
+                      enum:
+                        - DAILY_AMOUNT
+                        - DAILY_PERCENTAGE
+                        - MONTHLY_PERCENTAGE
+                    amount:
+                      type: number
+                    percentage:
+                      type: number
+                discount:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      mode:
+                        enum:
+                          - FIXED
+                          - PERCENTAGE
+                      amount:
+                        type: number
+                      percentage:
+                        type: number
+                      limit_date:
+                        oneOf:
+                          - $ref: "#/components/schemas/DateISO"
+        products:
+          type: array
+          items:
+            type: object
+            required: ["id", "offer"]
+            properties:
+              id:
+                oneOf:
+                  - $ref: "#/components/schemas/UUID"
+              offer:
+                oneOf:
+                  - $ref: "#/components/schemas/UUID"
+        checkout:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+        metadata:
+          type: object
+          nullable: true
 servers:
   - url: https://test.api.recebafacil.com
     description: Test Environment
@@ -654,7 +996,7 @@ servers:
     description: Production Environment
 paths:
   # Buyers
-  "/marketplaces/{marketaplace_id}/buyers":
+  "/marketplaces/{marketplace_id}/buyers":
     get:
       operationId: getBuyers
       tags:
@@ -663,7 +1005,7 @@ paths:
         - BasicAuth: []
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -756,7 +1098,7 @@ paths:
         - BasicAuth: []
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -766,23 +1108,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BuyerDefinition"
-            example:
-              name: "John Doe"
-              document_number: "12345678900"
-              email: "email@example.com"
-              email_secondary: "email2@example.com"
-              phone_number: "00123456789"
-              birthdate: "1999-01-01"
-              obs: "A description here"
-              street: "Rua Teodoro"
-              house_number: "123"
-              postal_code: "12345123"
-              neighborhood: "Jardim Teodoro"
-              city: "São Paulo"
-              state_initials: "SP"
-              state: "São Paulo"
-              country_code: "BR"
+              $ref: "#/components/schemas/CreateBuyerDefinition"
+            examples:
+              simple:
+                value:
+                  name: "John Doe"
+                  document_number: "12345678900"
+              full:
+                value:
+                  name: "John Doe"
+                  document_number: "12345678900"
+                  email: "email@example.com"
+                  email_secondary: "email2@example.com"
+                  phone_number: "00123456789"
+                  birthdate: "1999-01-01"
+                  obs: "A description here"
+                  street: "Rua Teodoro"
+                  house_number: "123"
+                  postal_code: "12345123"
+                  neighborhood: "Jardim Teodoro"
+                  city: "São Paulo"
+                  state_initials: "SP"
+                  state: "São Paulo"
+                  country_code: "BR"
       responses:
         200:
           description: Registro de um comprador realizado com sucesso
@@ -807,7 +1155,7 @@ paths:
                 state: "São Paulo"
                 country_code: "BR"
   # Buyers
-  "/marketplaces/{marketaplace_id}/buyers/{buyer_id}":
+  "/marketplaces/{marketplace_id}/buyers/{buyer_id}":
     get:
       operationId: getBuyer
       tags:
@@ -816,7 +1164,7 @@ paths:
         - BasicAuth: []
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -863,7 +1211,7 @@ paths:
         - BasicAuth: []
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -931,7 +1279,7 @@ paths:
         - BasicAuth: []
       parameters:
         - in: path
-          name: marketaplace_id
+          name: marketplace_id
           schema:
             $ref: "#/components/schemas/UUID"
           required: true
@@ -1028,7 +1376,7 @@ paths:
           description: Identificador do comprador
       responses:
         200:
-          description: Busca por todos os cartões de créditos de um comprador realilzada com sucesso
+          description: Busca por todos os cartões de créditos de um comprador realizada com sucesso
           content:
             application/json:
               schema:
@@ -1151,7 +1499,7 @@ paths:
           description: Identificador do comprador
       responses:
         200:
-          description: Busca por cartão de crédito padrão de um comprador realilzada com sucesso
+          description: Busca por cartão de crédito padrão de um comprador realizada com sucesso
           content:
             application/json:
               schema:
@@ -1193,7 +1541,7 @@ paths:
           description: Identificador do comprador
       responses:
         200:
-          description: Busca por todas as faturas de um comprador realilzada com sucesso
+          description: Busca por todas as faturas de um comprador realizada com sucesso
           content:
             application/json:
               schema:
@@ -1358,7 +1706,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PlanDefinition"
+              $ref: "#/components/schemas/CreatePlanDefinition"
             example:
               name: "Assinatura anual"
               frequency: "monthly"
@@ -1567,23 +1915,7 @@ paths:
                       items:
                         type: array
                         items:
-                          allOf:
-                            - $ref: "#/components/schemas/SubscriptionDefinition"
-                            - type: object
-                              required:
-                                - due_since_date
-                                - amount
-                                - description
-                              properties:
-                                due_since_date:
-                                  nullable: true
-                                  readOnly: true
-                                amount:
-                                  nullable: true
-                                  readOnly: true
-                                description:
-                                  nullable: true
-                                  readOnly: true
+                          $ref: "#/components/schemas/SubscriptionDefinition"
               example:
                 resource: "list"
                 items: [
@@ -1592,6 +1924,7 @@ paths:
                     "resource": "subscription",
                     "plan": "df8eb1ac-c63f-4060-85d7-8352d0dfa692",
                     "customer": "827ed4e0-ebe0-449f-82d7-038564492993",
+                    "card": null,
                     "description": null,
                     "payment_method": "credit",
                     "due_date": "2024-09-11T00:00:00+00:00",
@@ -1601,6 +1934,7 @@ paths:
                     "currency": "BRL",
                     "status": "active",
                     "suspended_at": null,
+                    "metadata": null,
                     "created_at": "2024-08-11T15:53:12+00:00",
                     "updated_at": "2024-08-11T15:53:22+00:00"
                   },
@@ -1609,6 +1943,7 @@ paths:
                     "resource": "subscription",
                     "plan": "4ea1158b-5431-41d4-9421-e5ff49be1818",
                     "customer": "c41f668c-427b-4c8e-a483-22dd215a9874",
+                    "card": "827ed4e0-ebe0-449f-82d7-038564492993",
                     "description": null,
                     "payment_method": "credit",
                     "due_date": "2024-09-11T00:00:00+00:00",
@@ -1618,6 +1953,7 @@ paths:
                     "currency": "BRL",
                     "status": "canceled",
                     "suspended_at": null,
+                    "metadata": null,
                     "created_at": "2024-08-11T15:50:54+00:00",
                     "updated_at": "2024-08-11T15:53:21+00:00"
                   }
@@ -1646,53 +1982,71 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SubscriptionDefinition"
-            example:
-              plan: "4df56ebb-79cd-40cb-9e10-a57d093f592b"
-              customer: "827ed4e0-ebe0-449f-82d7-03856449299"
-              description: Assinatura mensal
-              payment_method: "credit"
-              due_date: "2021-08-27"
-              currency: BRL
+              $ref: "#/components/schemas/CreateSubscriptionDefinition"
+            examples:
+              use_default_card:
+                value:
+                  plan: "4df56ebb-79cd-40cb-9e10-a57d093f592b"
+                  customer: "827ed4e0-ebe0-449f-82d7-03856449299"
+                  description: Monthly subscription
+                  payment_method: "credit"
+                  due_date: "2021-08-27"
+                  currency: BRL
+              use_specific_card:
+                value:
+                  plan: "4df56ebb-79cd-40cb-9e10-a57d093f592b"
+                  customer: "827ed4e0-ebe0-449f-82d7-03856449299"
+                  card: "c41f668c-427b-4c8e-a483-22dd215a9874"
+                  description: Monthly subscription
+                  payment_method: "credit"
+                  due_date: "2021-08-27"
+                  currency: BRL
       responses:
         200:
           description: Registro de uma assinatura realizado com sucesso
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/SubscriptionDefinition"
-                  - type: object
-                    required:
-                      - due_since_date
-                      - amount
-                      - description
-                    properties:
-                      due_since_date:
-                        nullable: true
-                        readOnly: true
-                      amount:
-                        nullable: true
-                        readOnly: true
-                      description:
-                        nullable: true
-                        readOnly: true
-              example:
-                id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
-                resource: "subscription"
-                plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
-                customer: "827ed4e0-ebe0-449f-82d7-038564492993"
-                description: null
-                payment_method: "credit"
-                due_date: "2024-09-11T00:00:00+00:00"
-                due_since_date: null
-                expiration_date: null
-                amount: null
-                currency: "BRL"
-                status: "active"
-                suspended_at: null
-                created_at: "2024-08-11T15:53:12+00:00"
-                updated_at: "2024-08-11T15:53:22+00:00"
+                $ref: "#/components/schemas/SubscriptionDefinition"
+              examples:
+                use_default_card:
+                  value:
+                    id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                    resource: "subscription"
+                    plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                    customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                    card: null
+                    description: null
+                    payment_method: "credit"
+                    due_date: "2024-09-11T00:00:00+00:00"
+                    due_since_date: null
+                    expiration_date: null
+                    amount: null
+                    currency: "BRL"
+                    status: "active"
+                    suspended_at: null
+                    metadata: null
+                    created_at: "2024-08-11T15:53:12+00:00"
+                    updated_at: "2024-08-11T15:53:22+00:00"
+                use_specific_card:
+                  value:
+                    id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                    resource: "subscription"
+                    plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                    customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                    card: "c41f668c-427b-4c8e-a483-22dd215a9874"
+                    description: null
+                    payment_method: "credit"
+                    due_date: "2024-09-11T00:00:00+00:00"
+                    due_since_date: null
+                    expiration_date: null
+                    amount: null
+                    currency: "BRL"
+                    status: "active"
+                    suspended_at: null
+                    metadata: null
+                    created_at: "2024-08-11T15:53:12+00:00"
+                    updated_at: "2024-08-11T15:53:22+00:00"
   # Subscriptions
   "/marketplaces/{marketplace_id}/subscriptions/{subscription_id}":
     get:
@@ -1721,28 +2075,13 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/SubscriptionDefinition"
-                  - type: object
-                    required:
-                      - due_since_date
-                      - amount
-                      - description
-                    properties:
-                      due_since_date:
-                        nullable: true
-                        readOnly: true
-                      amount:
-                        nullable: true
-                        readOnly: true
-                      description:
-                        nullable: true
-                        readOnly: true
+                $ref: "#/components/schemas/SubscriptionDefinition"
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
                 plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
                 customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                card: null
                 description: null
                 payment_method: "credit"
                 due_date: "2024-09-11T00:00:00+00:00"
@@ -1752,6 +2091,7 @@ paths:
                 currency: "BRL"
                 status: "active"
                 suspended_at: null
+                metadata: null
                 created_at: "2024-08-11T15:53:12+00:00"
                 updated_at: "2024-08-11T15:53:22+00:00"
     put:
@@ -1759,7 +2099,7 @@ paths:
       tags:
         - Subscriptions
       security:
-        - BasicAuth: [ ]
+        - BasicAuth: []
       parameters:
         - in: path
           name: marketplace_id
@@ -1793,23 +2133,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/SubscriptionDefinition"
-                  - type: object
-                    required:
-                      - due_since_date
-                      - amount
-                      - description
-                    properties:
-                      due_since_date:
-                        nullable: true
-                        readOnly: true
-                      amount:
-                        nullable: true
-                        readOnly: true
-                      description:
-                        nullable: true
-                        readOnly: true
+                $ref: "#/components/schemas/SubscriptionDefinition"
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
@@ -1824,6 +2148,7 @@ paths:
                 currency: "BRL"
                 status: "active"
                 suspended_at: null
+                metadata: null
                 created_at: "2024-08-11T15:53:12+00:00"
                 updated_at: "2024-08-11T15:53:22+00:00"
     delete:
@@ -1831,7 +2156,7 @@ paths:
       tags:
         - Subscriptions
       security:
-        - BasicAuth: [ ]
+        - BasicAuth: []
       parameters:
         - in: path
           name: marketplace_id
@@ -1852,12 +2177,24 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: "#/components/schemas/SubscriptionDefinition"
               example:
-                message: Subscription has been canceled
+                id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
+                resource: "subscription"
+                plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
+                customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                description: null
+                payment_method: "credit"
+                due_date: "2024-09-11T00:00:00+00:00"
+                due_since_date: null
+                expiration_date: null
+                amount: null
+                currency: "BRL"
+                status: "canceled"
+                suspended_at: null
+                metadata: null
+                created_at: "2024-08-11T15:53:12+00:00"
+                updated_at: "2024-08-11T15:53:22+00:00"
   # Subscriptions
   "/marketplaces/{marketplace_id}/subscriptions/{subscription_id}/suspend":
     post:
@@ -1886,28 +2223,13 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/SubscriptionDefinition"
-                  - type: object
-                    required:
-                      - due_since_date
-                      - amount
-                      - description
-                    properties:
-                      due_since_date:
-                        nullable: true
-                        readOnly: true
-                      amount:
-                        nullable: true
-                        readOnly: true
-                      description:
-                        nullable: true
-                        readOnly: true
+                $ref: "#/components/schemas/SubscriptionDefinition"
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
                 plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
                 customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                card: null
                 description: null
                 payment_method: "credit"
                 due_date: "2024-09-11T00:00:00+00:00"
@@ -1917,6 +2239,7 @@ paths:
                 currency: "BRL"
                 status: "suspended"
                 suspended_at: "2024-09-07T15:53:12+00:00"
+                metadata: null
                 created_at: "2024-08-11T15:53:12+00:00"
                 updated_at: "2024-08-11T15:53:22+00:00"
   # Subscriptions
@@ -1947,28 +2270,13 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/SubscriptionDefinition"
-                  - type: object
-                    required:
-                      - due_since_date
-                      - amount
-                      - description
-                    properties:
-                      due_since_date:
-                        nullable: true
-                        readOnly: true
-                      amount:
-                        nullable: true
-                        readOnly: true
-                      description:
-                        nullable: true
-                        readOnly: true
+                $ref: "#/components/schemas/SubscriptionDefinition"
               example:
                 id: "8f4bed6f-43e0-4148-a64f-59bcc55f5ae8"
                 resource: "subscription"
                 plan: "df8eb1ac-c63f-4060-85d7-8352d0dfa692"
                 customer: "827ed4e0-ebe0-449f-82d7-038564492993"
+                card: null
                 description: null
                 payment_method: "credit"
                 due_date: "2024-09-11T00:00:00+00:00"
@@ -1978,6 +2286,7 @@ paths:
                 currency: "BRL"
                 status: "active"
                 suspended_at: null
+                metadata: null
                 created_at: "2024-08-11T15:53:12+00:00"
                 updated_at: "2024-08-11T15:53:22+00:00"
   # Invoices
@@ -2091,11 +2400,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/InvoiceDefinition"
+              $ref: "#/components/schemas/CreateInvoiceDefinition"
             example:
               subscription: "4df56ebb-79cd-40cb-9e10-a57d093f592b"
               customer: "827ed4e0-ebe0-449f-82d7-03856449299"
-              description: Fatura 26/09/2024
+              description: An invoice test
               payment_method: credit
               due_date: "2024-08-27"
               expiration_date: "2024-08-26"
@@ -2447,11 +2756,11 @@ paths:
           required: true
           description: Identificador marketplace
       requestBody:
-        description: Informações para criar um webhoook
+        description: Informações para criar um webhook
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WebhookDefinition"
+              $ref: "#/components/schemas/CreateWebhookDefinition"
             example:
               endpoint: "https://exmaple.net"
               description: "Webhook transaction pre_authorization succeeded"
@@ -2604,6 +2913,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: ["token", "customer"]
               properties:
                 token:
                   type: string
@@ -2724,6 +3034,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: ["holder_name", "expiration_month", "expiration_year", "card_number", "security_code"]
               properties:
                 holder_name:
                   type: string
@@ -2768,12 +3079,823 @@ paths:
                   updated_at: "2021-09-14T15:45:54+00:00"
                 created_at: "2021-09-14T15:45:54+00:00"
                 updated_at: "2021-09-14T15:45:54+00:00"
-  # Transaction
+  # Transactions
   "/marketplaces/{marketplace_id}/transactions":
-    post:
-      operationId: createTransaction
+    get:
+      operationId: getTransactions
       tags:
         - Transactions
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
+      responses:
+        200:
+          description: Busca por todas as transações realizada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TransactionDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    resource: "transaction",
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    coupon: null,
+                    status: "succeeded",
+                    amount: 990,
+                    original_amount: 990,
+                    discount_amount: 0,
+                    currency: "BRL",
+                    description: null,
+                    statement_descriptor: "COMPANY",
+                    payment_type: "credit",
+                    payment_method: {
+                        id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e",
+                        resource: "card",
+                        customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                        is_default: true,
+                        description: null,
+                        first4_digits: "1234",
+                        last4_digits: "5678",
+                        card_brand: "MasterCard",
+                        expiration_month: "1",
+                        expiration_year: "23",
+                        holder_name: "John Doe",
+                        created_at: "2022-02-17T15:14:57+00:00",
+                        updated_at: "2022-02-17-T15:14:57+00:00"
+                    },
+                    products: [],
+                    transaction_number: "Z133937-000260004",
+                    gateway_authorizer: "cielo",
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    installment_plan: 1,
+                    refunded: false,
+                    voided: false,
+                    captured: true,
+                    fees: "0.08",
+                    expected_on: "2022-03-21T03:00:00+00:00",
+                    voided_at: null,
+                    history: [
+                      {
+                        id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                        amount: "2.00",
+                        status: "succeeded",
+                        authorizer: "cielo",
+                        created_at: "2022-02-17 17:19:19",
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                        authorizer_id: "000260004",
+                        response_code: "00",
+                        operation_type: "created",
+                        response_message: "",
+                        authorization_nsu: "20180510122911535",
+                        authorization_code: "133937",
+                        gatewayResponseTime: "3"
+                      },
+                      {
+                        id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                        amount: "2.00",
+                        status: "succeeded",
+                        authorizer: "cielo",
+                        created_at: "2022-02-17 17:19:20",
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                        authorizer_id: "000260004",
+                        response_code: "00",
+                        operation_type: "authorization",
+                        response_message: "",
+                        authorization_nsu: "20180510122911535",
+                        authorization_code: "133937",
+                        gatewayResponseTime: "3"
+                      }
+                    ],
+                    metadata: null,
+                    created_at: "2022-02-17T17:19:22+00:00",
+                    updated_at: "2022-02-17T17:19:23+00:00"
+                  },
+                  {
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    resource: "transaction",
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    coupon: null,
+                    status: "succeeded",
+                    amount: 990,
+                    original_amount: 990,
+                    discount_amount: 0,
+                    currency: "BRL",
+                    description: null,
+                    statement_descriptor: "COMPANY",
+                    payment_type: "credit",
+                    payment_method: {
+                      id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e",
+                      resource: "card",
+                      customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                      is_default: true,
+                      description: null,
+                      first4_digits: "1234",
+                      last4_digits: "5678",
+                      card_brand: "MasterCard",
+                      expiration_month: "1",
+                      expiration_year: "23",
+                      holder_name: "John Doe",
+                      created_at: "2022-02-17T15:14:57+00:00",
+                      updated_at: "2022-02-17-T15:14:57+00:00"
+                    },
+                    products: [],
+                    transaction_number: "Z133937-000260004",
+                    gateway_authorizer: "cielo",
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    installment_plan: 1,
+                    refunded: false,
+                    voided: false,
+                    captured: true,
+                    fees: "0.08",
+                    expected_on: "2022-03-21T03:00:00+00:00",
+                    voided_at: null,
+                    history: [
+                      {
+                        id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                        amount: "2.00",
+                        status: "succeeded",
+                        authorizer: "cielo",
+                        created_at: "2022-02-17 17:19:19",
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                        authorizer_id: "000260004",
+                        response_code: "00",
+                        operation_type: "created",
+                        response_message: "",
+                        authorization_nsu: "20180510122911535",
+                        authorization_code: "133937",
+                        gatewayResponseTime: "3"
+                      },
+                      {
+                        id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                        amount: "2.00",
+                        status: "succeeded",
+                        authorizer: "cielo",
+                        created_at: "2022-02-17 17:19:20",
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                        authorizer_id: "000260004",
+                        response_code: "00",
+                        operation_type: "authorization",
+                        response_message: "",
+                        authorization_nsu: "20180510122911535",
+                        authorization_code: "133937",
+                        gatewayResponseTime: "3"
+                      }
+                    ],
+                    metadata: null,
+                    created_at: "2022-02-17T17:19:22+00:00",
+                    updated_at: "2022-02-17T17:19:23+00:00"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createTransaction
+      deprecated: true
+      tags:
+        - Transactions
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+      requestBody:
+        description: Informações para criar uma transação
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTransactionDefinition"
+            examples:
+              useDefaultCustomerCard:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with customer"
+                  payment_type: "credit"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+              useCustomerCardId:
+                value:
+                  amount: 2990
+                  currency: "BRL"
+                  description: "Transaction with customer card id"
+                  payment_type: "credit"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                  card:
+                    id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
+              simpleBoleto:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with simple boleto"
+                  payment_type: "boleto"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+              fullBoleto:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with simple boleto"
+                  payment_type: "boleto"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                  payment_method:
+                    expiration_date: "2022-04-29T22:00:00"
+                    payment_limit_date: "2022-04-30"
+                    body_instructions: [ "Sr. Caixa" ]
+                    billing_instructions:
+                      late_fee:
+                        mode: "FIXED"
+                        amount: 100
+                      interest:
+                        mode: DAILY_PERCENTAGE
+                        percentage: 0.2
+              pix:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with pix"
+                  payment_type: "pix"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+      responses:
+        200:
+          description: Registro de uma transação realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionDefinition"
+              examples:
+                credit:
+                  value:
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                    resource: "transaction"
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    coupon: null
+                    status: "succeeded"
+                    amount: 990
+                    original_amount: 990
+                    discount_amount: 0
+                    currency: "BRL"
+                    description: null
+                    statement_descriptor: "COMPANY"
+                    payment_type: "credit"
+                    payment_method:
+                      id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
+                      resource: "card"
+                      customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                      is_default: true
+                      description: null
+                      first4_digits: "1234"
+                      last4_digits: "5678"
+                      card_brand: "MasterCard"
+                      expiration_month: "1"
+                      expiration_year: "23"
+                      holder_name: "John Doe"
+                      created_at: "2022-02-17T15:14:57+00:00"
+                      updated_at: "2022-02-17-T15:14:57+00:00"
+                    products: [ ]
+                    transaction_number: "Z133937-000260004"
+                    gateway_authorizer: "cielo"
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    installment_plan: 1
+                    refunded: false
+                    voided: false
+                    captured: true
+                    fees: "0.08"
+                    expected_on: "2022-03-21T03:00:00+00:00"
+                    voided_at: null
+                    history:
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:19"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "created"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:20"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "authorization"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                    metadata: null
+                    created_at: "2022-02-17T17:19:22+00:00"
+                    updated_at: "2022-02-17T17:19:23+00:00"
+                boleto:
+                  value:
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                    resource: "transaction"
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    coupon: null
+                    status: "succeeded"
+                    amount: 990
+                    original_amount: 990
+                    discount_amount: 0
+                    currency: "BRL"
+                    description: null
+                    statement_descriptor: "COMPANY"
+                    payment_type: "credit"
+                    payment_method:
+                      id: "44184ef9-17e3-4a2f-bef5-4e4db731a645"
+                      resource: "boleto"
+                      customer: "685d659f-a424-4960-9f2c-c45250d9c6fb"
+                      status: "not_paid"
+                      description: "Sale using boleto payment type"
+                      expiration_date: "2022-04-29T00:00:00+00:00"
+                      payment_limit_date: "2022-04-30T00:00:00+00:00"
+                      paid_at: null
+                      bank_code: "109"
+                      recipient: "Company"
+                      url: "https://boletolink.com/index.html"
+                      barcode: "34191092147357005893031339210002389700000001000"
+                      address: null
+                      accepted: false
+                      printed: false
+                      downloaded: false
+                      metadata: null
+                      created_at: "2022-04-26T05:55:58.000Z"
+                      updated_at: "2022-04-26T05:55:58.000Z"
+                    products: [ ]
+                    transaction_number: "Z133937-000260004"
+                    gateway_authorizer: "cielo"
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    installment_plan: 1
+                    refunded: false
+                    voided: false
+                    captured: true
+                    fees: "0.08"
+                    expected_on: "2022-03-21T03:00:00+00:00"
+                    voided_at: null
+                    history:
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:19"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "created"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:20"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "authorization"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                    metadata: null
+                    created_at: "2022-02-17T17:19:22+00:00"
+                    updated_at: "2022-02-17T17:19:23+00:00"
+                pix:
+                  value:
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                    resource: "transaction"
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    coupon: null
+                    status: "succeeded"
+                    amount: 990
+                    original_amount: 990
+                    discount_amount: 0
+                    currency: "BRL"
+                    description: null
+                    statement_descriptor: "COMPANY"
+                    payment_type: "credit"
+                    payment_method:
+                      id: "1f63793d-b673-424f-80ce-fa2610525196"
+                      customer: "427e659f-a424-4960-9f2c-d66550d9c6fb"
+                      provider: "ITAU"
+                      expiration_date: "2022-04-27T18:43:48.000Z"
+                      link: "https://pixlink.com.br"
+                      qrcode: "1234567921226770014BR.GOV.BCB.PIX2555api.itau/pix/qr/v2/8ba42394-e069-4688-a578-fbd1efe8475d5204000053039865802BR5925"
+                      metadata: null
+                      created_at: "2022-04-27T18:43:48.000Z"
+                      updated_at: "2022-04-27T18:43:48.000Z"
+                    products: [ ]
+                    transaction_number: "Z133937-000260004"
+                    gateway_authorizer: "cielo"
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    installment_plan: 1
+                    refunded: false
+                    voided: false
+                    captured: true
+                    fees: "0.08"
+                    expected_on: "2022-03-21T03:00:00+00:00"
+                    voided_at: null
+                    history:
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:19"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "created"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:20"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "authorization"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                    metadata: null
+                    created_at: "2022-02-17T17:19:22+00:00"
+                    updated_at: "2022-02-17T17:19:23+00:00"
+  "/marketplaces/{marketplace_id}/transactions/{transaction_id}":
+    get:
+      operationId: getTransaction
+      tags:
+        - Transactions
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: transaction_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da transação
+      responses:
+        200:
+          description: Busca de uma transação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionDefinition"
+              example: {
+                id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                resource: "transaction",
+                on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                coupon: null,
+                status: "succeeded",
+                amount: 990,
+                original_amount: 990,
+                discount_amount: 0,
+                currency: "BRL",
+                description: null,
+                statement_descriptor: "COMPANY",
+                payment_type: "credit",
+                payment_method: {
+                  id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e",
+                  resource: "card",
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                  is_default: true,
+                  description: null,
+                  first4_digits: "1234",
+                  last4_digits: "5678",
+                  card_brand: "MasterCard",
+                  expiration_month: "1",
+                  expiration_year: "23",
+                  holder_name: "John Doe",
+                  created_at: "2022-02-17T15:14:57+00:00",
+                  updated_at: "2022-02-17-T15:14:57+00:00"
+                },
+                products: [],
+                transaction_number: "Z133937-000260004",
+                gateway_authorizer: "cielo",
+                sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                installment_plan: 1,
+                refunded: false,
+                voided: false,
+                captured: true,
+                fees: "0.08",
+                expected_on: "2022-03-21T03:00:00+00:00",
+                voided_at: null,
+                history: [
+                  {
+                    id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    amount: "2.00",
+                    status: "succeeded",
+                    authorizer: "cielo",
+                    created_at: "2022-02-17 17:19:19",
+                    transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    authorizer_id: "000260004",
+                    response_code: "00",
+                    operation_type: "created",
+                    response_message: "",
+                    authorization_nsu: "20180510122911535",
+                    authorization_code: "133937",
+                    gatewayResponseTime: "3"
+                  },
+                  {
+                    id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    amount: "2.00",
+                    status: "succeeded",
+                    authorizer: "cielo",
+                    created_at: "2022-02-17 17:19:20",
+                    transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    authorizer_id: "000260004",
+                    response_code: "00",
+                    operation_type: "authorization",
+                    response_message: "",
+                    authorization_nsu: "20180510122911535",
+                    authorization_code: "133937",
+                    gatewayResponseTime: "3"
+                  }
+                ],
+                metadata: null,
+                created_at: "2022-02-17T17:19:22+00:00",
+                updated_at: "2022-02-17T17:19:23+00:00"
+              }
+  "/marketplaces/{marketplace_id}/transactions/{transaction_id}/void":
+    post:
+      operationId: refundTransaction
+      tags:
+        - Transactions
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: transaction_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da transação
+      responses:
+        200:
+          description: Estorno de uma transação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionDefinition"
+              example: {
+                id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                resource: "transaction",
+                on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                coupon: null,
+                status: "canceled",
+                amount: 990,
+                original_amount: 990,
+                discount_amount: 0,
+                currency: "BRL",
+                description: null,
+                statement_descriptor: "COMPANY",
+                payment_type: "credit",
+                payment_method: {
+                  id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e",
+                  resource: "card",
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                  is_default: true,
+                  description: null,
+                  first4_digits: "1234",
+                  last4_digits: "5678",
+                  card_brand: "MasterCard",
+                  expiration_month: "1",
+                  expiration_year: "23",
+                  holder_name: "John Doe",
+                  created_at: "2022-02-17T15:14:57+00:00",
+                  updated_at: "2022-02-17-T15:14:57+00:00"
+                },
+                products: [],
+                transaction_number: "Z133937-000260004",
+                gateway_authorizer: "cielo",
+                sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                installment_plan: 1,
+                refunded: false,
+                voided: false,
+                captured: true,
+                fees: "0.08",
+                expected_on: "2022-03-21T03:00:00+00:00",
+                voided_at: "2022-02-18T17:19:22+00:00",
+                history: [
+                  {
+                    id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    amount: "2.00",
+                    status: "succeeded",
+                    authorizer: "cielo",
+                    created_at: "2022-02-17 17:19:19",
+                    transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    authorizer_id: "000260004",
+                    response_code: "00",
+                    operation_type: "created",
+                    response_message: "",
+                    authorization_nsu: "20180510122911535",
+                    authorization_code: "133937",
+                    gatewayResponseTime: "3"
+                  },
+                  {
+                    id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    amount: "2.00",
+                    status: "succeeded",
+                    authorizer: "cielo",
+                    created_at: "2022-02-17 17:19:20",
+                    transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    authorizer_id: "000260004",
+                    response_code: "00",
+                    operation_type: "authorization",
+                    response_message: "",
+                    authorization_nsu: "20180510122911535",
+                    authorization_code: "133937",
+                    gatewayResponseTime: "3"
+                  }
+                ],
+                metadata: null,
+                created_at: "2022-02-17T17:19:22+00:00",
+                updated_at: "2022-02-17T17:19:23+00:00"
+              }
+  "/marketplaces/{marketplace_id}/transactions/{transaction_id}/capture":
+    post:
+      operationId: captureTransaction
+      tags:
+        - Transactions
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: transaction_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da transação
+      responses:
+        200:
+          description: Captura de uma transação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionDefinition"
+              example: {
+                id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                resource: "transaction",
+                on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                coupon: null,
+                status: "succeeded",
+                amount: 990,
+                original_amount: 990,
+                discount_amount: 0,
+                currency: "BRL",
+                description: null,
+                statement_descriptor: "COMPANY",
+                payment_type: "credit",
+                payment_method: {
+                  id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e",
+                  resource: "card",
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                  is_default: true,
+                  description: null,
+                  first4_digits: "1234",
+                  last4_digits: "5678",
+                  card_brand: "MasterCard",
+                  expiration_month: "1",
+                  expiration_year: "23",
+                  holder_name: "John Doe",
+                  created_at: "2022-02-17T15:14:57+00:00",
+                  updated_at: "2022-02-17-T15:14:57+00:00"
+                },
+                products: [],
+                transaction_number: "Z133937-000260004",
+                gateway_authorizer: "cielo",
+                sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                installment_plan: 1,
+                refunded: false,
+                voided: false,
+                captured: true,
+                fees: "0.08",
+                expected_on: "2022-03-21T03:00:00+00:00",
+                voided_at: "2022-02-18T17:19:22+00:00",
+                history: [
+                  {
+                    id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    amount: "2.00",
+                    status: "succeeded",
+                    authorizer: "cielo",
+                    created_at: "2022-02-17 17:19:19",
+                    transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    authorizer_id: "000260004",
+                    response_code: "00",
+                    operation_type: "created",
+                    response_message: "",
+                    authorization_nsu: "20180510122911535",
+                    authorization_code: "133937",
+                    gatewayResponseTime: "3"
+                  },
+                  {
+                    id: "685d659f-a424-4960-9f2c-d66550d9c6fb",
+                    amount: "2.00",
+                    status: "succeeded",
+                    authorizer: "cielo",
+                    created_at: "2022-02-17 17:19:20",
+                    transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
+                    authorizer_id: "000260004",
+                    response_code: "00",
+                    operation_type: "authorization",
+                    response_message: "",
+                    authorization_nsu: "20180510122911535",
+                    authorization_code: "133937",
+                    gatewayResponseTime: "3"
+                  }
+                ],
+                metadata: null,
+                created_at: "2022-02-17T17:19:22+00:00",
+                updated_at: "2022-02-17T17:19:23+00:00"
+              }
+  # Transaction V2
+  "/v2/marketplaces/{marketplace_id}/transactions":
+    post:
+      operationId: createTransactionV2
+      tags:
+        - Transactions V2
       security:
         - BasicAuth: []
       parameters:
@@ -2788,17 +3910,61 @@ paths:
         content:
           application/json:
             schema:
-             $ref: "#/components/schemas/TransactionDefinition"
-            example:
-              amount: 990
-              currency: "BRL"
-              description: null
-              payment_type: "credit"
-              on_behalf_of: "196e9031-ff89-485a-a6ab-efc728a77d76"
-              card:
-                id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
-              capture: true
-              statement_descriptor: null
+             $ref: "#/components/schemas/CreateTransactionDefinition"
+            examples:
+              useDefaultCustomerCard:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with customer"
+                  payment_type: "credit"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+              useCustomerCardId:
+                value:
+                  amount: 2990
+                  currency: "BRL"
+                  description: "Transaction with customer card id"
+                  payment_type: "credit"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                  card:
+                    id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
+              simpleBoleto:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with simple boleto"
+                  payment_type: "boleto"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+              fullBoleto:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with simple boleto"
+                  payment_type: "boleto"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                  payment_method:
+                    expiration_date: "2022-04-29T22:00:00"
+                    payment_limit_date: "2022-04-30"
+                    body_instructions: ["Sr. Caixa"]
+                    billing_instructions:
+                      late_fee:
+                        mode: "FIXED"
+                        amount: 100
+                      interest:
+                        mode: DAILY_PERCENTAGE
+                        percentage: 0.2
+              pix:
+                value:
+                  amount: 1990
+                  currency: "BRL"
+                  description: "Transaction with pix"
+                  payment_type: "pix"
+                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
       responses:
         200:
           description: Registro de uma transação realizado com sucesso
@@ -2806,68 +3972,216 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TransactionDefinition"
-              example:
-                id: dfd760fe-5bc7-4e01-a8fe-6432780abf17
-                resource: transaction
-                on_behalf_of: '08dbd20e-8171-4006-bc22-7d250ae4d250'
-                customer: 685d659f-a424-4960-9f2c-d66550d9c6fb
-                status: succeeded
-                amount: 990
-                original_amount: 990
-                currency: BRL
-                description: null
-                statement_descriptor: null
-                payment_type: credit
-                payment_method:
-                  id: 6bb65625-4bcf-48d2-b04d-3b1dacca635e
-                  resource: card
-                  customer: 685d659f-a424-4960-9f2c-d66550d9c6fb
-                  description:
-                  first4_digits: '1234'
-                  last4_digits: '5678'
-                  card_brand: MasterCard
-                  expiration_month: '1'
-                  expiration_year: '23'
-                  holder_name: John Doe
-                  created_at: '2022-02-17T15:14:57+00:00'
-                  updated_at: 2022-02-17-T15:14:57+00:00
-                transaction_number: Z133937-000260004
-                gateway_authorizer: cielo
-                sales_receipt: 6d25be1bfb5d4b61abc90c155946482a
-                installment_plan: 1
-                refunded: false
-                voided: false
-                captured: true
-                fees: '0.08'
-                expected_on: '2022-03-21T03:00:00+00:00'
-                voided_at:
-                history:
-                  - id: 6491cfe363e54e6e8f5fa56b19f56c34
-                    amount: '2.00'
-                    status: succeeded
-                    authorizer:
-                    created_at: '2022-02-17 17:19:19'
-                    transaction: dfd760fe-5bc7-4e01-a8fe-6432780abf17
-                    authorizer_id:
-                    response_code:
-                    operation_type: created
-                    response_message:
-                    authorization_nsu:
-                    authorization_code:
-                    gatewayResponseTime:
-                  - id: 6db92625978843fa94c610f0b41ddf3f
-                    amount: '2.00'
-                    status: succeeded
-                    authorizer: cielo
-                    created_at: '2022-02-17 17:19:20'
-                    transaction: dfd760fe-5bc7-4e01-a8fe-6432780abf17
-                    authorizer_id: '000260004'
-                    response_code: '00'
-                    operation_type: authorization
-                    response_message: ''
-                    authorization_nsu: '20180510122911535'
-                    authorization_code: '133937'
-                    gatewayResponseTime: '3'
-                metadata:
-                created_at: '2022-02-17T17:19:22+00:00'
-                updated_at: '2022-02-17T17:19:23+00:00'
+              examples:
+                credit:
+                  value:
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                    resource: "transaction"
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    coupon: null
+                    status: "succeeded"
+                    amount: 990
+                    original_amount: 990
+                    discount_amount: 0
+                    currency: "BRL"
+                    description: null
+                    statement_descriptor: "COMPANY"
+                    payment_type: "credit"
+                    payment_method:
+                      id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
+                      resource: "card"
+                      customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                      is_default: true
+                      description: null
+                      first4_digits: "1234"
+                      last4_digits: "5678"
+                      card_brand: "MasterCard"
+                      expiration_month: "1"
+                      expiration_year: "23"
+                      holder_name: "John Doe"
+                      created_at: "2022-02-17T15:14:57+00:00"
+                      updated_at: "2022-02-17-T15:14:57+00:00"
+                    products: []
+                    transaction_number: "Z133937-000260004"
+                    gateway_authorizer: "cielo"
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    installment_plan: 1
+                    refunded: false
+                    voided: false
+                    captured: true
+                    fees: "0.08"
+                    expected_on: "2022-03-21T03:00:00+00:00"
+                    voided_at: null
+                    history:
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:19"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "created"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:20"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "authorization"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                    metadata: null
+                    created_at: "2022-02-17T17:19:22+00:00"
+                    updated_at: "2022-02-17T17:19:23+00:00"
+                boleto:
+                  value:
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                    resource: "transaction"
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    coupon: null
+                    status: "succeeded"
+                    amount: 990
+                    original_amount: 990
+                    discount_amount: 0
+                    currency: "BRL"
+                    description: null
+                    statement_descriptor: "COMPANY"
+                    payment_type: "credit"
+                    payment_method:
+                      id: "44184ef9-17e3-4a2f-bef5-4e4db731a645"
+                      resource: "boleto"
+                      customer: "685d659f-a424-4960-9f2c-c45250d9c6fb"
+                      status: "not_paid"
+                      description: "Sale using boleto payment type"
+                      expiration_date: "2022-04-29T00:00:00+00:00"
+                      payment_limit_date: "2022-04-30T00:00:00+00:00"
+                      paid_at: null
+                      bank_code: "109"
+                      recipient: "Company"
+                      url: "https://boletolink.com/index.html"
+                      barcode: "34191092147357005893031339210002389700000001000"
+                      address: null
+                      accepted: false
+                      printed: false
+                      downloaded: false
+                      metadata: null
+                      created_at: "2022-04-26T05:55:58.000Z"
+                      updated_at: "2022-04-26T05:55:58.000Z"
+                    products: []
+                    transaction_number: "Z133937-000260004"
+                    gateway_authorizer: "cielo"
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    installment_plan: 1
+                    refunded: false
+                    voided: false
+                    captured: true
+                    fees: "0.08"
+                    expected_on: "2022-03-21T03:00:00+00:00"
+                    voided_at: null
+                    history:
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:19"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "created"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:20"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "authorization"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                    metadata: null
+                    created_at: "2022-02-17T17:19:22+00:00"
+                    updated_at: "2022-02-17T17:19:23+00:00"
+                pix:
+                  value:
+                    id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                    resource: "transaction"
+                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    coupon: null
+                    status: "succeeded"
+                    amount: 990
+                    original_amount: 990
+                    discount_amount: 0
+                    currency: "BRL"
+                    description: null
+                    statement_descriptor: "COMPANY"
+                    payment_type: "credit"
+                    payment_method:
+                      id: "1f63793d-b673-424f-80ce-fa2610525196"
+                      customer: "427e659f-a424-4960-9f2c-d66550d9c6fb"
+                      provider: "ITAU"
+                      expiration_date: "2022-04-27T18:43:48.000Z"
+                      link: "https://pixlink.com.br"
+                      qrcode: "1234567921226770014BR.GOV.BCB.PIX2555api.itau/pix/qr/v2/8ba42394-e069-4688-a578-fbd1efe8475d5204000053039865802BR5925"
+                      metadata: null
+                      created_at: "2022-04-27T18:43:48.000Z"
+                      updated_at: "2022-04-27T18:43:48.000Z"
+                    products: []
+                    transaction_number: "Z133937-000260004"
+                    gateway_authorizer: "cielo"
+                    sales_receipt: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                    installment_plan: 1
+                    refunded: false
+                    voided: false
+                    captured: true
+                    fees: "0.08"
+                    expected_on: "2022-03-21T03:00:00+00:00"
+                    voided_at: null
+                    history:
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:19"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "created"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                      - id: "685d659f-a424-4960-9f2c-d66550d9c6fb"
+                        amount: "2.00"
+                        status: "succeeded"
+                        authorizer: "cielo"
+                        created_at: "2022-02-17 17:19:20"
+                        transaction: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
+                        authorizer_id: "000260004"
+                        response_code: "00"
+                        operation_type: "authorization"
+                        response_message: ""
+                        authorization_nsu: "20180510122911535"
+                        authorization_code: "133937"
+                        gatewayResponseTime: "3"
+                    metadata: null
+                    created_at: "2022-02-17T17:19:22+00:00"
+                    updated_at: "2022-02-17T17:19:23+00:00"
