@@ -9,16 +9,19 @@ components:
       scheme: basic
   schemas:
     # Common Definitions
+    # UUID Definition
     UUID:
       description: "Identificador único"
       type: string
       format: uuid
       pattern: ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
       maxLength: 36
+    # Date Definition
     DateISO:
       description: Data em formato ISO 1806
       type: string
       pattern: \d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d+([+-][0-2]\d:[0-5]\d|Z)
+    # List Definition
     ListDefinition:
       type: object
       required: ["resource", "items", "limit", "offset", "page", "total", "total_pages", "has_more"]
@@ -989,6 +992,105 @@ components:
         metadata:
           type: object
           nullable: true
+    # Coupon Definition
+    CouponDefinition:
+      type: object
+      required: [ "id", "resource", "marketplace", "seller", "type", "value", "valueType", "redeemCode", "maxUse", "dateStart", "dateEnd", "frequency", "duration", "created_at", "updated_at" ]
+      properties:
+        id:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        resource:
+          enum:
+            - coupon
+          readOnly: true
+        marketplace:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        type:
+          enum:
+            - product
+            - subscription
+        value:
+          type: number
+        valueType:
+          enum:
+            - fixed
+            - percentage
+        redeemCode:
+          type: string
+        maxUse:
+          type: number
+        dateStart:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        dateEnd:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        frequency:
+          type: number
+          nullable: true
+        duration:
+          type: number
+          nullable: true
+        metadata:
+          type: object
+          nullable: true
+        created_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        updated_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+    CreateCouponDefinition:
+      type: object
+      required: [ "seller", "type", "value", "valueType" ]
+      properties:
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        type:
+          enum:
+            - product
+            - subscription
+        value:
+          type: number
+        valueType:
+          enum:
+            - fixed
+            - percentage
+        redeemCode:
+          type: string
+        maxUse:
+          type: number
+        dateStart:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        dateEnd:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        frequency:
+          type: number
+          nullable: true
+        duration:
+          type: number
+          nullable: true
+        metadata:
+          type: object
+          nullable: true
 servers:
   - url: https://test.api.recebafacil.com
     description: Test Environment
@@ -1374,6 +1476,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do comprador
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       responses:
         200:
           description: Busca por todos os cartões de créditos de um comprador realizada com sucesso
@@ -1539,6 +1655,20 @@ paths:
             $ref: "#/components/schemas/UUID"
           required: true
           description: Identificador do comprador
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
       responses:
         200:
           description: Busca por todas as faturas de um comprador realizada com sucesso
@@ -3128,7 +3258,7 @@ paths:
                   {
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
                     resource: "transaction",
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d",
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
                     coupon: null,
                     status: "succeeded",
@@ -3204,7 +3334,7 @@ paths:
                   {
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
                     resource: "transaction",
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d",
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
                     coupon: null,
                     status: "succeeded",
@@ -3311,7 +3441,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with customer"
                   payment_type: "credit"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
               useCustomerCardId:
                 value:
@@ -3319,7 +3449,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with customer card id"
                   payment_type: "credit"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                   card:
                     id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
@@ -3329,7 +3459,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with simple boleto"
                   payment_type: "boleto"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
               fullBoleto:
                 value:
@@ -3337,7 +3467,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with simple boleto"
                   payment_type: "boleto"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                   payment_method:
                     expiration_date: "2022-04-29T22:00:00"
@@ -3356,7 +3486,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with pix"
                   payment_type: "pix"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
       responses:
         200:
@@ -3370,7 +3500,7 @@ paths:
                   value:
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
                     resource: "transaction"
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                     coupon: null
                     status: "succeeded"
@@ -3440,7 +3570,7 @@ paths:
                   value:
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
                     resource: "transaction"
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                     coupon: null
                     status: "succeeded"
@@ -3516,7 +3646,7 @@ paths:
                   value:
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
                     resource: "transaction"
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                     coupon: null
                     status: "succeeded"
@@ -3609,7 +3739,7 @@ paths:
               example: {
                 id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
                 resource: "transaction",
-                on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d",
                 customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
                 coupon: null,
                 status: "succeeded",
@@ -3713,7 +3843,7 @@ paths:
               example: {
                 id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
                 resource: "transaction",
-                on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d",
                 customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
                 coupon: null,
                 status: "canceled",
@@ -3817,7 +3947,7 @@ paths:
               example: {
                 id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17",
                 resource: "transaction",
-                on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250",
+                on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d",
                 customer: "685d659f-a424-4960-9f2c-d66550d9c6fb",
                 coupon: null,
                 status: "succeeded",
@@ -3918,7 +4048,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with customer"
                   payment_type: "credit"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
               useCustomerCardId:
                 value:
@@ -3926,7 +4056,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with customer card id"
                   payment_type: "credit"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                   card:
                     id: "6bb65625-4bcf-48d2-b04d-3b1dacca635e"
@@ -3936,7 +4066,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with simple boleto"
                   payment_type: "boleto"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
               fullBoleto:
                 value:
@@ -3944,7 +4074,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with simple boleto"
                   payment_type: "boleto"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                   payment_method:
                     expiration_date: "2022-04-29T22:00:00"
@@ -3963,7 +4093,7 @@ paths:
                   currency: "BRL"
                   description: "Transaction with pix"
                   payment_type: "pix"
-                  on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                  on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                   customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
       responses:
         200:
@@ -3977,7 +4107,7 @@ paths:
                   value:
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
                     resource: "transaction"
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                     coupon: null
                     status: "succeeded"
@@ -4047,7 +4177,7 @@ paths:
                   value:
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
                     resource: "transaction"
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                     coupon: null
                     status: "succeeded"
@@ -4123,7 +4253,7 @@ paths:
                   value:
                     id: "dfd760fe-5bc7-4e01-a8fe-6432780abf17"
                     resource: "transaction"
-                    on_behalf_of: "08dbd20e-8171-4006-bc22-7d250ae4d250"
+                    on_behalf_of: "8a60750d-319e-42d7-abad-bdcabe55e57d"
                     customer: "685d659f-a424-4960-9f2c-d66550d9c6fb"
                     coupon: null
                     status: "succeeded"
@@ -4185,3 +4315,230 @@ paths:
                     metadata: null
                     created_at: "2022-02-17T17:19:22+00:00"
                     updated_at: "2022-02-17T17:19:23+00:00"
+  # Coupons
+  "/marketplaces/{marketplace_id}/coupons":
+    get:
+      operationId: getCoupons
+      tags:
+        - Coupons
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
+      responses:
+        200:
+          description: Busca por todos os cupons realizada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/CouponDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "612038fa-86ef-4766-976c-0874c991a4ef",
+                    "resource": "coupon",
+                    "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                    "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                    "type": "product",
+                    "value": 0.3,
+                    "valueType": "percentage",
+                    "redeemCode": "EUVFoqgAE1",
+                    "maxUse": 1,
+                    "dateStart": null,
+                    "dateEnd": null,
+                    "frequency": null,
+                    "duration": null,
+                    "metadata": null,
+                    "createdAt": "2022-09-13T01:42:48.000Z",
+                    "updatedAt": "2022-09-13T01:42:48.000Z"
+                  },
+                  {
+                    "id": "798fe131-ec50-4622-84e1-11afe76a20e1",
+                    "resource": "coupon",
+                    "marketplace": "158b1371-d14a-4983-9f56-9ddc2d877906",
+                    "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                    "type": "product",
+                    "value": 0.3,
+                    "valueType": "percentage",
+                    "redeemCode": "EUVFoqgAE2",
+                    "maxUse": 1,
+                    "dateStart": null,
+                    "dateEnd": null,
+                    "frequency": null,
+                    "duration": null,
+                    "metadata": null,
+                    "createdAt": "2022-08-24T08:10:18.000Z",
+                    "updatedAt": "2022-08-24T08:10:18.000Z"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createCoupon
+      tags:
+        - Coupons
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador marketplace
+      requestBody:
+        description: Informações para criar um cupom
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCouponDefinition"
+            examples:
+              product:
+                value:
+                  seller: "8a60750d-319e-42d7-abad-bdcabe55e57d"
+                  type: "product"
+                  value: 0.25
+                  valueType: "percentage"
+                  redeemCode: "TEST123"
+              subscription:
+                value:
+                  seller: "8a60750d-319e-42d7-abad-bdcabe55e57d"
+                  type: "subscription"
+                  value: 5000
+                  valueType: "fixed"
+                  redeemCode: "TEST123"
+                  frequency: "monthly"
+                  duration: 1
+      responses:
+        200:
+          description: Registro de um cupom realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponDefinition"
+              example:
+                id: "612038fa-86ef-4766-976c-0874c991a4ef"
+                resource: "coupon"
+                marketplace: "d3d60e89-ee10-41f0-a456-d9e698266c19"
+                seller: "8a60750d-319e-42d7-abad-bdcabe55e57d"
+                type: "product"
+                value: 0.3
+                valueType: "percentage"
+                redeemCode: "TEST123"
+                maxUse: 1
+                dateStart: null
+                dateEnd: null
+                frequency: null
+                duration: null
+                metadata: null
+                createdAt: "2022-09-13T01:42:48.000Z"
+                updatedAt: "2022-09-13T01:42:48.000Z"
+  # Coupons
+  "/marketplaces/{marketplace_id}/coupons/{coupon_id}":
+    get:
+      operationId: getCoupon
+      tags:
+        - Coupons
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: coupon_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do cupom
+      responses:
+        200:
+          description: Busca de um cupom realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouponDefinition"
+              example:
+                id: "612038fa-86ef-4766-976c-0874c991a4ef"
+                resource: "coupon"
+                marketplace: "d3d60e89-ee10-41f0-a456-d9e698266c19"
+                seller: "8a60750d-319e-42d7-abad-bdcabe55e57d"
+                type: "product"
+                value: 0.3
+                valueType: "percentage"
+                redeemCode: "TEST123"
+                maxUse: 1
+                dateStart: null
+                dateEnd: null
+                frequency: null
+                duration: null
+                metadata: null
+                createdAt: "2022-09-13T01:42:48.000Z"
+                updatedAt: "2022-09-13T01:42:48.000Z"
+    delete:
+      operationId: deleteCoupon
+      tags:
+        - Coupons
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: coupon_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do cupom
+      responses:
+        200:
+          description: Cupom deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Coupon has been deleted
