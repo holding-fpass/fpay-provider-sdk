@@ -1091,6 +1091,322 @@ components:
         metadata:
           type: object
           nullable: true
+    # Checkout definition
+    CheckoutDefinition:
+      type: object
+      required: ["id", "resource", "marketplace", "seller", "payment_typed_accepted", "redirect_url", "integrations", "design", "metadata", "created_at", "updated_at"]
+      properties:
+        id:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        resource:
+          enum:
+            - coupon
+          readOnly: true
+        marketplace:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        payment_types_accepted:
+          type: array
+          items:
+            enum:
+              - credit
+              - pix
+              - boleto
+          readOnly: true
+        redirect_url:
+          type: object
+          properties:
+            general:
+              type: string
+              nullable: true
+            credit:
+              type: string
+              nullable: true
+            boleto:
+              type: string
+              nullable: true
+            pix:
+              type: string
+              nullable: true
+          readOnly: true
+        integrations:
+          type: object
+          properties:
+            rd_station:
+              type: object
+              properties:
+                public_token:
+                  type: string
+                  nullable: true
+            facebook_pixel:
+              type: object
+              properties:
+                pixel_code:
+                  type: string
+                  nullable: true
+                access_token:
+                  type: string
+                  nullable: true
+            active_campaign:
+              type: object
+              properties:
+                api_key:
+                  type: string
+                  nullable: true
+                account_name:
+                  type: string
+                  nullable: true
+            google_analytics:
+              type: object
+              properties:
+                app:
+                  type: string
+                tracking_id:
+                  type: string
+                  nullable: true
+        metadata:
+          type: object
+          nullable: true
+        created_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        updated_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+      readOnly: true
+    CreateCheckoutDefinition:
+      type: object
+      required: ["seller", "payment_types_accepted", "redirect_url"]
+      properties:
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        payment_types_accepted:
+          type: array
+          items:
+            enum:
+              - credit
+              - pix
+              - boleto
+        redirect_url:
+          type: object
+          properties:
+            general:
+              type: string
+              nullable: true
+            credit:
+              type: string
+              nullable: true
+            boleto:
+              type: string
+              nullable: true
+            pix:
+              type: string
+              nullable: true
+    UpdateCheckoutDefinition:
+      type: object
+      required: ["payment_types_accepted", "redirect_url"]
+      properties:
+        payment_types_accepted:
+          type: array
+          items:
+            enum:
+              - credit
+              - pix
+              - boleto
+        redirect_url:
+          type: object
+          properties:
+            general:
+              type: string
+              nullable: true
+            credit:
+              type: string
+              nullable: true
+            boleto:
+              type: string
+              nullable: true
+            pix:
+              type: string
+              nullable: true
+    # Product Definition
+    ProductDefinition:
+      type: object
+      required: ["id", "resource", "marketplace", "seller", "name", "description", "image", "status", "metadata", "createdAt", "updatedAt"]
+      properties:
+        id:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        resource:
+          enum:
+            - coupon
+          readOnly: true
+        marketplace:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          enum:
+            - active
+            - disabled
+        metadata:
+          type: object
+          nullable: true
+        created_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        updated_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+      readOnly: true
+    CreateProductDefinition:
+      type: object
+      properties:
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          nullable: true
+        status:
+          enum:
+            - active
+            - disabled
+    UpdateProductDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          nullable: true
+        status:
+          enum:
+            - active
+            - disabled
+    # Offer Definition
+    OfferDefinition:
+      type: object
+      required: ["id", "resource", "marketplace", "seller", "product", "main", "name", "description", "status", "amount", "dateStart", "dateEnd", "createdAt", "updatedAt" ]
+      properties:
+        id:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        resource:
+          enum:
+            - coupon
+          readOnly: true
+        marketplace:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        main:
+          type: boolean
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          enum:
+            - active
+            - disabled
+        amount:
+          type: number
+        dateStart:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
+        dateEnd:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+            - nullable: true
+        automaticallyRecoverSales:
+          type: boolean
+        metadata:
+          type: object
+          nullable: true
+        created_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+        updated_at:
+          oneOf:
+            - $ref: "#/components/schemas/DateISO"
+            - readOnly: true
+      readOnly: true
+    CreateOfferDefinition:
+      type: object
+      properties:
+        seller:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        product:
+          oneOf:
+            - $ref: "#/components/schemas/UUID"
+          readOnly: true
+        main:
+          type: boolean
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          enum:
+            - active
+            - disabled
+        amount:
+          type: number
+    UpdateOfferDefinition:
+      type: object
+      properties:
+        main:
+          type: boolean
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          enum:
+            - active
+            - disabled
+        amount:
+          type: number
 servers:
   - url: https://test.api.recebafacil.com
     description: Test Environment
@@ -4542,3 +4858,982 @@ paths:
                     type: string
               example:
                 message: Coupon has been deleted
+  # Checkouts
+  "/marketplaces/{marketplace_id}/checkouts":
+    get:
+      operationId: getCheckouts
+      tags:
+        - Checkouts
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
+      responses:
+        200:
+          description: Busca por todos os checkouts realizado com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/CheckoutDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "2a3d5d58-1581-48f0-aa92-5edf2cadbc65",
+                    "resource": "checkout",
+                    "marketplace": "e40273ce-1fb4-4f4a-adb0-2544580a3bca",
+                    "seller": "42e09700-4581-4e0d-af87-ca2db1b665c3",
+                    "payment_types_accepted": [
+                      "credit"
+                    ],
+                    "redirect_url": {
+                      "pix": null,
+                      "boleto": null,
+                      "credit": null,
+                      "general": "https://www.mywebsite.com/"
+                    },
+                    "integrations": {
+                      "rd_station": {
+                        "public_token": null
+                      },
+                      "facebook_pixel": {
+                        "pixel_code": null,
+                        "access_token": null
+                      },
+                      "active_campaign": {
+                        "api_key": null,
+                        "account_name": null
+                      },
+                      "google_analytics": {
+                        "app": "FpayCheckout",
+                        "tracking_id": null
+                      }
+                    },
+                    "design": {
+                      "layout": {
+                        "card": null,
+                        "top_bar": null,
+                        "right_bar": null,
+                        "background": null,
+                        "bottom_bar": null
+                      }
+                    },
+                    "metadata": null,
+                    "created_at": "2023-09-11T18:35:55.000Z",
+                    "updated_at": "2023-09-11T18:35:55.000Z",
+                    "deleted_at": null
+                  },
+                  {
+                    "id": "7e3be0cd-10b4-4f28-97f4-f3d1ba7a4bae",
+                    "resource": "checkout",
+                    "marketplace": "e40273ce-1fb4-4f4a-adb0-2544580a3bca",
+                    "seller": "42e09700-4581-4e0d-af87-ca2db1b665c3",
+                    "payment_types_accepted": [
+                      "credit",
+                      "pix",
+                      "boleto"
+                    ],
+                    "redirect_url": {
+                      "pix": null,
+                      "boleto": null,
+                      "credit": null,
+                      "general": "https://www.mywebsite.com/"
+                    },
+                    "integrations": {
+                      "rd_station": {
+                        "public_token": null
+                      },
+                      "facebook_pixel": {
+                        "pixel_code": null,
+                        "access_token": null
+                      },
+                      "active_campaign": {
+                        "api_key": null,
+                        "account_name": null
+                      },
+                      "google_analytics": {
+                        "app": "FpayCheckout",
+                        "tracking_id": null
+                      }
+                    },
+                    "design": {
+                      "layout": {
+                        "card": null,
+                        "top_bar": null,
+                        "right_bar": null,
+                        "background": null,
+                        "bottom_bar": null
+                      }
+                    },
+                    "metadata": null,
+                    "created_at": "2023-09-11T18:35:55.000Z",
+                    "updated_at": "2023-09-11T18:35:55.000Z",
+                    "deleted_at": null
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createCheckout
+      tags:
+        - Checkouts
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador marketplace
+      requestBody:
+        description: Informações para criar um cupom
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCheckoutDefinition"
+            examples:
+              product:
+                value:
+                  seller: "8a60750d-319e-42d7-abad-bdcabe55e57d"
+                  payment_types_accepted: ["credit"]
+                  redirect_url: {
+                    pix: null,
+                    boleto: null,
+                    credit: null,
+                    general: "https://mywebsite.com/"
+                  }
+              subscription:
+                value:
+                  seller: "8a60750d-319e-42d7-abad-bdcabe55e57d"
+                  payment_types_accepted: ["credit", "pix", "boleto"]
+                  redirect_url: {
+                    pix: "https://mywebsite.com/pix",
+                    boleto: "https://mywebsite.com/boleto",
+                    credit: "https://mywebsite.com/credit",
+                    general: "https://mywebsite.com/"
+                  }
+      responses:
+        200:
+          description: Registro de um checkout realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutDefinition"
+              example:
+                {
+                  "id": "b144c1b3-7084-475c-8967-62dd2de2c6ac",
+                  "resource": "checkout",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "payment_types_accepted": [
+                    "credit"
+                  ],
+                  "redirect_url": {
+                    "pix": null,
+                    "boleto": null,
+                    "credit": null,
+                    "general": "https://www.instagram.com/mariabonitashoppingcidadenort"
+                  },
+                  "integrations": {
+                    "rd_station": {
+                      "public_token": null
+                    },
+                    "facebook_pixel": {
+                      "pixel_code": null,
+                      "access_token": null
+                    },
+                    "active_campaign": {
+                      "api_key": null,
+                      "account_name": null
+                    },
+                    "google_analytics": {
+                      "app": "FpayCheckout",
+                      "tracking_id": null
+                    }
+                  },
+                  "design": {
+                    "layout": {
+                      "card": null,
+                      "top_bar": null,
+                      "right_bar": null,
+                      "background": null,
+                      "bottom_bar": null
+                    }
+                  },
+                  "metadata": null,
+                  "created_at": "2023-09-11T18:35:55.000Z",
+                  "updated_at": "2023-09-11T18:35:55.000Z",
+                  "deleted_at": null
+                }
+  # Checkouts
+  "/marketplaces/{marketplace_id}/checkouts/{checkout_id}":
+    get:
+      operationId: getCheckout
+      tags:
+        - Checkouts
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do checkout
+      responses:
+        200:
+          description: Busca de um checkout realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutDefinition"
+              example:
+                {
+                  "id": "b144c1b3-7084-475c-8967-62dd2de2c6ac",
+                  "resource": "checkout",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "payment_types_accepted": [
+                    "credit"
+                  ],
+                  "redirect_url": {
+                    "pix": null,
+                    "boleto": null,
+                    "credit": null,
+                    "general": "https://www.instagram.com/mariabonitashoppingcidadenort"
+                  },
+                  "integrations": {
+                    "rd_station": {
+                      "public_token": null
+                    },
+                    "facebook_pixel": {
+                      "pixel_code": null,
+                      "access_token": null
+                    },
+                    "active_campaign": {
+                      "api_key": null,
+                      "account_name": null
+                    },
+                    "google_analytics": {
+                      "app": "FpayCheckout",
+                      "tracking_id": null
+                    }
+                  },
+                  "design": {
+                    "layout": {
+                      "card": null,
+                      "top_bar": null,
+                      "right_bar": null,
+                      "background": null,
+                      "bottom_bar": null
+                    }
+                  },
+                  "metadata": null,
+                  "created_at": "2023-09-11T18:35:55.000Z",
+                  "updated_at": "2023-09-11T18:35:55.000Z",
+                  "deleted_at": null
+                }
+    put:
+      operationId: updateCheckout
+      tags:
+        - Checkouts
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do checkout
+      requestBody:
+        description: Informações para atualizar um checkout
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCheckoutDefinition"
+            example:
+              {
+                "payment_types_accepted": [
+                  "credit",
+                  "pix",
+                  "boleto"
+                ],
+                "redirect_url": {
+                  "credit": null,
+                  "boleto": null,
+                  "pix": null,
+                  "general": "https://mywebsite.com"
+                }
+              }
+      responses:
+        200:
+          description: Checkout atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutDefinition"
+              example:
+                {
+                  "id": "b144c1b3-7084-475c-8967-62dd2de2c6ac",
+                  "resource": "checkout",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "payment_types_accepted": [
+                    "credit"
+                  ],
+                  "redirect_url": {
+                    "pix": null,
+                    "boleto": null,
+                    "credit": null,
+                    "general": "https://www.instagram.com/mariabonitashoppingcidadenort"
+                  },
+                  "integrations": {
+                    "rd_station": {
+                      "public_token": null
+                    },
+                    "facebook_pixel": {
+                      "pixel_code": null,
+                      "access_token": null
+                    },
+                    "active_campaign": {
+                      "api_key": null,
+                      "account_name": null
+                    },
+                    "google_analytics": {
+                      "app": "FpayCheckout",
+                      "tracking_id": null
+                    }
+                  },
+                  "design": {
+                    "layout": {
+                      "card": null,
+                      "top_bar": null,
+                      "right_bar": null,
+                      "background": null,
+                      "bottom_bar": null
+                    }
+                  },
+                  "metadata": null,
+                  "created_at": "2023-09-11T18:35:55.000Z",
+                  "updated_at": "2023-09-11T18:35:55.000Z",
+                  "deleted_at": null
+                }
+    delete:
+      operationId: deleteCheckout
+      tags:
+        - Checkouts
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do checkout
+      responses:
+        200:
+          description: Checkout deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Checkout has been deleted
+  # Products
+  "/marketplaces/{marketplace_id}/products":
+    get:
+      operationId: getProducts
+      tags:
+        - Products
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
+      responses:
+        200:
+          description: Busca por todos os produtos realizado com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ProductDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "052bafa4-9d96-42fd-ae4d-5d17efa487d1",
+                    "resource": "product",
+                    "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                    "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                    "name": "Product test",
+                    "description": "Product description test here.",
+                    "image": "https://image.com",
+                    "status": "active",
+                    "metadata": null,
+                    "createdAt": "2023-09-11T18:28:25.000Z",
+                    "updatedAt": "2023-09-11T18:28:25.000Z"
+                  },
+                  {
+                    "id": "8485421d-e123-4c07-bb6a-0b38fcbd19bf",
+                    "resource": "product",
+                    "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                    "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                    "name": "Product test",
+                    "description": "Product description test here.",
+                    "image": "https://image.com",
+                    "status": "active",
+                    "metadata": null,
+                    "createdAt": "2023-09-11T18:28:25.000Z",
+                    "updatedAt": "2023-09-11T18:28:25.000Z"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createProduct
+      tags:
+        - Products
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador marketplace
+      requestBody:
+        description: Informações para criar um produto
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductDefinition"
+            example:
+              {
+                "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                "name": "Product test",
+                "description": "Product description test here.",
+                "image": "https://image.com",
+                "status": "active"
+              }
+      responses:
+        200:
+          description: Registro de um produto realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDefinition"
+              example:
+                {
+                  "id": "6f4545ff-7f58-41ab-a62e-847b29a568a8",
+                  "resource": "product",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "name": "Product test",
+                  "description": "Product description test here.",
+                  "image": "https://image.com",
+                  "status": "active",
+                  "metadata": null,
+                  "createdAt": "2023-09-11T18:28:25.000Z",
+                  "updatedAt": "2023-09-11T18:28:25.000Z"
+                }
+  # Products
+  "/marketplaces/{marketplace_id}/products/{product_id}":
+    get:
+      operationId: getProduct
+      tags:
+        - Products
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do produto
+      responses:
+        200:
+          description: Busca de um produto realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDefinition"
+              example:
+                {
+                  "id": "6f4545ff-7f58-41ab-a62e-847b29a568a8",
+                  "resource": "product",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "name": "Product test",
+                  "description": "Product description test here.",
+                  "image": "https://image.com",
+                  "status": "active",
+                  "metadata": null,
+                  "createdAt": "2023-09-11T18:28:25.000Z",
+                  "updatedAt": "2023-09-11T18:28:25.000Z"
+                }
+    put:
+      operationId: updateProduct
+      tags:
+        - Products
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do produto
+      requestBody:
+        description: Informações para atualizar um produto
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProductDefinition"
+            example:
+              {
+                "name": "Product test",
+                "description": "Product description test here.",
+                "image": "https://image.com",
+                "status": "active",
+                "metadata": null
+              }
+      responses:
+        200:
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDefinition"
+              example:
+                {
+                  "id": "6f4545ff-7f58-41ab-a62e-847b29a568a8",
+                  "resource": "product",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "name": "Product test",
+                  "description": "Product description test here.",
+                  "image": "https://image.com",
+                  "status": "active",
+                  "metadata": null,
+                  "createdAt": "2023-09-11T18:28:25.000Z",
+                  "updatedAt": "2023-09-11T18:28:25.000Z"
+                }
+    delete:
+      operationId: deleteProduct
+      tags:
+        - Products
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do produto
+      responses:
+        200:
+          description: Produto deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Product has been deleted
+  # Offers
+  "/marketplaces/{marketplace_id}/offers":
+    get:
+      operationId: getOffers
+      tags:
+        - Offers
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem coletados no conjunto de resultados
+
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: false
+          description: O número de itens a serem ignorados antes de começar a coletar o conjunto de resultados
+      responses:
+        200:
+          description: Busca por todas as ofertas realizada com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ListDefinition"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/OfferDefinition"
+              example:
+                resource: "list"
+                items: [
+                  {
+                    "id": "9f82da34-1871-4723-bacc-507cbca1a7a2",
+                    "resource": "offer",
+                    "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                    "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                    "product": "efdcc6a1-3a99-4018-9144-8c81de868e4b",
+                    "main": true,
+                    "name": "Offer test",
+                    "description": "Offer test description here.",
+                    "status": "active",
+                    "amount": 497,
+                    "dateStart": null,
+                    "dateEnd": null,
+                    "automaticallyRecoverSales": false,
+                    "metadata": null,
+                    "createdAt": "2023-09-11T18:32:39.000Z",
+                    "updatedAt": "2023-09-11T18:32:39.000Z"
+                  },
+                  {
+                    "id": "af32143c-a7ff-423f-b1d6-6c623770c054",
+                    "resource": "offer",
+                    "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                    "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                    "product": "efdcc6a1-3a99-4018-9144-8c81de868e4b",
+                    "main": true,
+                    "name": "Offer test",
+                    "description": "Offer test description here.",
+                    "status": "active",
+                    "amount": 497,
+                    "dateStart": null,
+                    "dateEnd": null,
+                    "automaticallyRecoverSales": false,
+                    "metadata": null,
+                    "createdAt": "2023-09-11T18:32:39.000Z",
+                    "updatedAt": "2023-09-11T18:32:39.000Z"
+                  }
+                ]
+                limit: 30
+                offset: 0
+                page: 1
+                total: 2
+                total_pages: 1
+                has_more: false
+    post:
+      operationId: createOffer
+      tags:
+        - Offers
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador marketplace
+      requestBody:
+        description: Informações para criar uma oferta
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOfferDefinition"
+            example:
+              {
+                "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                "product": "efdcc6a1-3a99-4018-9144-8c81de868e4b",
+                "main": true,
+                "name": "Offer test",
+                "description": "Offer test description here.",
+                "status": "active",
+                "amount": 497
+              }
+      responses:
+        200:
+          description: Registro de uma oferta realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfferDefinition"
+              example:
+                {
+                  "id": "9f82da34-1871-4723-bacc-507cbca1a7a2",
+                  "resource": "offer",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "product": "efdcc6a1-3a99-4018-9144-8c81de868e4b",
+                  "main": true,
+                  "name": "Offer test",
+                  "description": "Offer test description here.",
+                  "status": "active",
+                  "amount": 497,
+                  "dateStart": null,
+                  "dateEnd": null,
+                  "automaticallyRecoverSales": false,
+                  "metadata": null,
+                  "createdAt": "2023-09-11T18:32:39.000Z",
+                  "updatedAt": "2023-09-11T18:32:39.000Z"
+                }
+  # Offers
+  "/marketplaces/{marketplace_id}/offers/{offer_id}":
+    get:
+      operationId: getOffer
+      tags:
+        - Offers
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da oferta
+      responses:
+        200:
+          description: Busca de uma oferta realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfferDefinition"
+              example:
+                {
+                  "id": "9f82da34-1871-4723-bacc-507cbca1a7a2",
+                  "resource": "offer",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "product": "efdcc6a1-3a99-4018-9144-8c81de868e4b",
+                  "main": true,
+                  "name": "Offer test",
+                  "description": "Offer test description here.",
+                  "status": "active",
+                  "amount": 497,
+                  "dateStart": null,
+                  "dateEnd": null,
+                  "automaticallyRecoverSales": false,
+                  "metadata": null,
+                  "createdAt": "2023-09-11T18:32:39.000Z",
+                  "updatedAt": "2023-09-11T18:32:39.000Z"
+                }
+    put:
+      operationId: updateOffer
+      tags:
+        - Offers
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da oferta
+      requestBody:
+        description: Informações para atualizar uma oferta
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOfferDefinition"
+            example:
+              {
+                "main": true,
+                "name": "Offer test",
+                "description": "Offer test description here.",
+                "status": "active",
+                "amount": 497
+              }
+      responses:
+        200:
+          description: Oferta atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OfferDefinition"
+              example:
+                {
+                  "id": "9f82da34-1871-4723-bacc-507cbca1a7a2",
+                  "resource": "offer",
+                  "marketplace": "d3d60e89-ee10-41f0-a456-d9e698266c19",
+                  "seller": "8a60750d-319e-42d7-abad-bdcabe55e57d",
+                  "product": "efdcc6a1-3a99-4018-9144-8c81de868e4b",
+                  "main": true,
+                  "name": "Offer test",
+                  "description": "Offer test description here.",
+                  "status": "active",
+                  "amount": 497,
+                  "dateStart": null,
+                  "dateEnd": null,
+                  "automaticallyRecoverSales": false,
+                  "metadata": null,
+                  "createdAt": "2023-09-11T18:32:39.000Z",
+                  "updatedAt": "2023-09-11T18:32:39.000Z"
+                }
+    delete:
+      operationId: deleteOffer
+      tags:
+        - Offers
+      security:
+        - BasicAuth: [ ]
+      parameters:
+        - in: path
+          name: marketplace_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador do marketplace
+
+        - in: path
+          name: checkout_id
+          schema:
+            $ref: "#/components/schemas/UUID"
+          required: true
+          description: Identificador da oferta
+      responses:
+        200:
+          description: Oferta deletada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Offer has been deleted
